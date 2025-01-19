@@ -1,3 +1,7 @@
 #include <nx/alias.h>
 
-int main() { return 0; }
+int main()
+{
+    nx::fs::File file;
+    return 0;
+}

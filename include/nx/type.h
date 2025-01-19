@@ -61,6 +61,22 @@ FROM from(TO);
 template <class T>
 String to_string(const T&);
 
+enum class OpenMode {
+    WRITE,
+    READ,
+};
+
+class Read {
+public:
+    virtual ~Read() = 0;
+    virtual size_t read(void* buffer, size_t bytes)
+    {
+        (void)buffer;
+        (void)bytes;
+        return 0;
+    }
+};
+
 } // namespace nx
 
 /**
