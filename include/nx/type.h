@@ -7,6 +7,7 @@
 #include <cstdint>
 #include <vector>
 #include <map>
+#include <type_traits>
 #include <unordered_map>
 #include <algorithm>
 #include <functional>
@@ -101,7 +102,10 @@ class Write {
 public:
     virtual ~Write() = 0;
     virtual WriteResult write(const void* buffer, size_t bytes) = 0;
+    virtual bool write_all(const void* buffer, size_t bytes);
 };
+
+bool pipe(Read& reader, Write& writer);
 
 } // namespace nx
 

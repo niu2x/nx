@@ -17,7 +17,7 @@ bool is_file(const String& path)
 
 bool exists(const String& path) { return std_fs::exists(path); }
 
-File::File(const String& p) : fp_(nullptr), path_(p) { }
+File::File(const String& p) : path_(p), fp_(nullptr), strong_ref_(true) { }
 
 File::~File() { close(); }
 
@@ -41,11 +41,21 @@ bool File::open(OpenMode m)
 void File::close()
 {
     if (fp_) {
-        fclose(fp_);
+        if (strong_ref_) {
+            fclose(fp_);
+        }
         fp_ = nullptr;
     }
 
     mode_ = std::nullopt;
+}
+
+File::File(const String& p, FILE* file, OpenMode m)
+: path_(p)
+, mode_(m)
+, fp_(file)
+, strong_ref_(false)
+{
 }
 
 ReadResult File::read(void* buffer, size_t bytes)
@@ -74,5 +84,27 @@ WriteResult File::write(const void* buffer, size_t bytes)
 
     return IO_Success { .bytes = fwrite(buffer, 1, bytes, fp_) };
 }
+
+File& File::in()
+{
+    static File __stdin { "stdin", stdin, OpenMode::READ };
+    return __stdin;
+}
+
+File& File::out()
+{
+    static File __stdin { "stdout", stdout, OpenMode::WRITE };
+    return __stdin;
+}
+
+File& File::err()
+{
+    static File __stdin { "stderr", stderr, OpenMode::WRITE };
+    return __stdin;
+}
+
+File& in() { return File::in(); }
+File& out() { return File::out(); }
+File& err() { return File::err(); }
 
 } // namespace nx::file_system

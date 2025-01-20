@@ -2,13 +2,9 @@
 
 int main()
 {
-    nx::fs::File file("./test.txt");
-
-    if (file.open_write()) {
-        file.write("hello world!", 12);
-    } else {
-        NX_PANIC("open file fail.");
-    }
+    auto& in = nx::fs::in();
+    auto& output = nx::fs::out();
+    nx::pipe(in, output);
 
     return 0;
 }

@@ -11,10 +11,14 @@ bool is_file(const String& path);
 bool exists(const String& path);
 
 class File : public Read, public Write, private Uncopyable {
-
 public:
     explicit File(const String& p = "");
+    File(const String& p, FILE* file, OpenMode m);
     ~File();
+
+    static File& in();
+    static File& out();
+    static File& err();
 
     void close();
 
@@ -28,8 +32,13 @@ public:
     WriteResult write(const void* buffer, size_t bytes) override;
 
 private:
+    String path_;
     Optional<OpenMode> mode_;
     FILE* fp_;
-    String path_;
+    bool strong_ref_;
 };
+
+File& in();
+File& out();
+File& err();
 }
