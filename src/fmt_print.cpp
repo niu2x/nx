@@ -12,4 +12,12 @@ void panic_fmt(const char* fmt, ...)
     throw RuntimeException(buffer);
 }
 
+void error_log(const char* fmt, ...)
+{
+    va_list args;
+    va_start(args, fmt);
+    vfprintf(stderr, fmt, args);
+    va_end(args);
+}
+
 } // namespace nx

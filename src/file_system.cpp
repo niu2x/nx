@@ -2,6 +2,8 @@
 
 #include <filesystem>
 
+#include "log.h"
+
 namespace std_fs = std::filesystem;
 
 namespace nx::file_system {
@@ -22,11 +24,13 @@ File::~File() { close(); }
 bool File::open(OpenMode m)
 {
     if (mode_) {
+        error_log("open fail: %s, reason: busy\n", path_.c_str());
         return false;
     }
 
-    fp_ = fopen(path_.c_str(), "rb");
+    fp_ = fopen(path_.c_str(), m == OpenMode::READ ? "rb" : "wb");
     if (fp_ == nullptr) {
+        error_log("open fail: %s, reason: fp_ is nullptr\n", path_.c_str());
         return false;
     }
 
@@ -54,9 +58,21 @@ ReadResult File::read(void* buffer, size_t bytes)
         return EndOfFile {};
 
     if (ferror(fp_))
-        return IO_Error::READ_FAIL;
+        return IO_Error::IO_FAIL;
 
-    return ReadSuccess { .bytes = fread(buffer, 1, bytes, fp_) };
+    return IO_Success { .bytes = fread(buffer, 1, bytes, fp_) };
+}
+
+WriteResult File::write(const void* buffer, size_t bytes)
+{
+    if (mode_ != OpenMode::WRITE) {
+        return IO_Error::NOT_OPEN;
+    }
+
+    if (ferror(fp_))
+        return IO_Error::IO_FAIL;
+
+    return IO_Success { .bytes = fwrite(buffer, 1, bytes, fp_) };
 }
 
 } // namespace nx::file_system

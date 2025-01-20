@@ -70,22 +70,19 @@ enum class OpenMode {
     READ,
 };
 
-struct ReadSuccess {
+struct IO_Success {
     size_t bytes;
 };
 
 struct EndOfFile {
 };
 
-struct Waiting {
-};
-
 enum class IO_Error {
     NOT_OPEN,
-    READ_FAIL,
+    IO_FAIL,
 };
 
-using ReadResult = Variant<IO_Error, Waiting, EndOfFile, ReadSuccess>;
+using ReadResult = Variant<IO_Error, EndOfFile, IO_Success>;
 
 class Read {
 public:
@@ -96,6 +93,14 @@ public:
     //     (void)bytes;
     //     return 0;
     // }
+};
+
+using WriteResult = Variant<IO_Error, IO_Success>;
+
+class Write {
+public:
+    virtual ~Write() = 0;
+    virtual WriteResult write(const void* buffer, size_t bytes) = 0;
 };
 
 } // namespace nx
