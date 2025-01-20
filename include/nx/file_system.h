@@ -20,6 +20,8 @@ public:
 
     const Optional<OpenMode>& get_mode() const { return mode_; }
 
+    ReadResult read(void* buffer, size_t bytes) override;
+
 private:
     Optional<OpenMode> mode_;
     FILE* fp_;

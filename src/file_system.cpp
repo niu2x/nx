@@ -44,4 +44,19 @@ void File::close()
     mode_ = std::nullopt;
 }
 
+ReadResult File::read(void* buffer, size_t bytes)
+{
+    if (mode_ != OpenMode::READ) {
+        return IO_Error::NOT_OPEN;
+    }
+
+    if (feof(fp_))
+        return EndOfFile {};
+
+    if (ferror(fp_))
+        return IO_Error::READ_FAIL;
+
+    return ReadSuccess { .bytes = fread(buffer, 1, bytes, fp_) };
+}
+
 } // namespace nx::file_system

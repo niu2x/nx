@@ -16,6 +16,7 @@
 #include <chrono>
 #include <string>
 #include <stdexcept>
+#include <variant>
 
 namespace nx {
 
@@ -25,6 +26,9 @@ template <class T>
 using Optional = std::optional<T>;
 
 using String = std::string;
+
+template <class... T>
+using Variant = std::variant<T...>;
 
 /**
  * @brief      用于被private继承, 子类将不可被Copy, 不可被Move
@@ -66,15 +70,32 @@ enum class OpenMode {
     READ,
 };
 
+struct ReadSuccess {
+    size_t bytes;
+};
+
+struct EndOfFile {
+};
+
+struct Waiting {
+};
+
+enum class IO_Error {
+    NOT_OPEN,
+    READ_FAIL,
+};
+
+using ReadResult = Variant<IO_Error, Waiting, EndOfFile, ReadSuccess>;
+
 class Read {
 public:
     virtual ~Read() = 0;
-    virtual size_t read(void* buffer, size_t bytes)
-    {
-        (void)buffer;
-        (void)bytes;
-        return 0;
-    }
+    virtual ReadResult read(void* buffer, size_t bytes) = 0;
+    // {
+    //     (void)buffer;
+    //     (void)bytes;
+    //     return 0;
+    // }
 };
 
 } // namespace nx
