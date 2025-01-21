@@ -129,4 +129,4 @@ private:
     }
 
 #define NX_GET_BIT_BOOL(byte, n) (NX_GET_BIT((byte), (n)) == 1)
-#define NX_GET_BIT(byte, n)      (((byte) >> n) & 1);
+#define NX_GET_BIT(byte, n)      (((byte) >> n) & 1)
