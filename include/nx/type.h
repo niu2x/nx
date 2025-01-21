@@ -159,6 +159,14 @@ inline uint64_t ceil_pow2(uint64_t n)
     return n + 1;
 }
 
+inline bool is_pow2(uint8_t x) { return ((x - 1) & x) == 0; }
+
+inline bool is_pow2(uint16_t x) { return ((x - 1) & x) == 0; }
+
+inline bool is_pow2(uint32_t x) { return ((x - 1) & x) == 0; }
+
+inline bool is_pow2(uint64_t x) { return ((x - 1) & x) == 0; }
+
 class CRC32 {
 public:
     CRC32();
