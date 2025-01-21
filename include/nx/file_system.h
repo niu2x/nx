@@ -43,4 +43,5 @@ File& out();
 File& err();
 
 String get_file_name(const String& path);
+String get_parent_path(const String& path);
 }

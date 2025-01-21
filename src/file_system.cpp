@@ -112,4 +112,9 @@ String get_file_name(const String& path)
     return std_fs::path(path).filename();
 }
 
+String get_parent_path(const String& path)
+{
+    return std_fs::path(path).parent_path();
+}
+
 } // namespace nx::file_system
