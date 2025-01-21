@@ -102,6 +102,17 @@ public:
 
 bool pipe(Read& reader, Write& writer);
 
+class MemoryFile : public Read, private Uncopyable {
+public:
+    MemoryFile(const uint8_t* buffer, size_t buf_len);
+    ReadResult read(void* buffer, size_t bytes) override;
+
+private:
+    const uint8_t* buffer_;
+    size_t buf_len_;
+    size_t read_pos_;
+};
+
 } // namespace nx
 
 /**

@@ -84,4 +84,26 @@ bool pipe(Read& source, Write& sink)
     return true;
 }
 
+MemoryFile::MemoryFile(const uint8_t* buffer, size_t buf_len)
+: buffer_(buffer)
+, buf_len_(buf_len)
+, read_pos_(0)
+{
+}
+
+ReadResult MemoryFile::read(void* output, size_t n)
+{
+    size_t remain = buf_len_ - read_pos_;
+
+    if (remain == 0) {
+        return EndOfFile {};
+    }
+
+    n = std::min(n, remain);
+
+    memcpy(output, buffer_ + read_pos_, n);
+    read_pos_ += n;
+    return IO_Success { n };
+}
+
 } // namespace nx
