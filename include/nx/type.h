@@ -26,6 +26,9 @@ using ByteBuffer = std::vector<uint8_t>;
 template <class T>
 using Optional = std::optional<T>;
 
+template <class T>
+using Vector = std::vector<T>;
+
 using String = std::string;
 
 template <class... T>
