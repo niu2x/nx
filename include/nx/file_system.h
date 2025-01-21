@@ -41,4 +41,6 @@ private:
 File& in();
 File& out();
 File& err();
+
+String get_file_name(const String& path);
 }

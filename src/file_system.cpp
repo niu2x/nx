@@ -107,4 +107,10 @@ File& in() { return File::in(); }
 File& out() { return File::out(); }
 File& err() { return File::err(); }
 
+String get_file_name(const String& path)
+{
+
+    return std_fs::path(path).filename();
+}
+
 } // namespace nx::file_system
