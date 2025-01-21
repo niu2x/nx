@@ -156,6 +156,18 @@ inline uint64_t ceil_pow2(uint64_t n)
     return n + 1;
 }
 
+class CRC32 {
+public:
+    CRC32();
+
+    void update(const uint8_t* buf, size_t len);
+    uint32_t get_value() const;
+
+private:
+    uint32_t table_[256];
+    uint32_t initial_;
+};
+
 } // namespace nx
 
 /**
