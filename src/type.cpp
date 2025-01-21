@@ -4,6 +4,22 @@ namespace nx {
 
 Read::~Read() { }
 
+bool Read::read_exact(void* buffer, size_t bytes)
+{
+    auto* ptr = (uint8_t*)buffer;
+    while (bytes) {
+        auto result = read(ptr, bytes);
+        if (std::holds_alternative<IO_Success>(result)) { }
+        if (auto* r = std::get_if<IO_Success>(&result)) {
+            bytes -= r->bytes;
+            ptr += r->bytes;
+        } else {
+            return false;
+        }
+    }
+    return true;
+}
+
 Write::~Write() { }
 
 bool Write::write_all(const void* buffer, size_t bytes)

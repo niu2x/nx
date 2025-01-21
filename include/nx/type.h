@@ -89,6 +89,7 @@ class Read {
 public:
     virtual ~Read() = 0;
     virtual ReadResult read(void* buffer, size_t bytes) = 0;
+    bool read_exact(void* buffer, size_t bytes);
 };
 
 using WriteResult = Variant<IO_Error, IO_Success>;
