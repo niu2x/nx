@@ -204,5 +204,5 @@ private:
 #define NX_CLEAR_BIT(x, bit)    ((x) & (~(1 << (bit))))
 
 #define NX_GET_BIT_BOOL(x, bit) (NX_GET_BIT((x), (bit)) == 1)
-#define NX_SET_BIT_BOOL(x, bit)                                                \
-    ((bit) ? NX_SET_BIT((x), (bit)) : NX_CLEAR_BIT((x), (bit)))
+#define NX_SET_BIT_BOOL(x, bit, value)                                         \
+    ((value) ? NX_SET_BIT((x), (bit)) : NX_CLEAR_BIT((x), (bit)))
