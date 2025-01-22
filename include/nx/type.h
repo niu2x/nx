@@ -34,6 +34,12 @@ using String = std::string;
 template <class... T>
 using Variant = std::variant<T...>;
 
+template <class T>
+using UniquePtr = std::unique_ptr<T>;
+
+template <class T>
+using SharedPtr = std::shared_ptr<T>;
+
 /**
  * @brief      用于被private继承, 子类将不可被Copy, 不可被Move
  */
