@@ -18,6 +18,7 @@
 #include <string>
 #include <stdexcept>
 #include <variant>
+#include <chrono>
 
 namespace nx {
 
@@ -175,6 +176,19 @@ private:
     uint32_t table_[256];
     uint32_t initial_;
 };
+
+using TimePoint = std::chrono::time_point<std::chrono::system_clock>;
+using TimeDuration = double;
+
+inline TimePoint time_now() { return std::chrono::system_clock::now(); }
+
+inline TimeDuration time_diff(const TimePoint& t_old, const TimePoint& t_new)
+{
+    using std_ms = std::chrono::milliseconds;
+    return std::chrono::duration_cast<std_ms>(t_new - t_old).count();
+}
+
+
 
 } // namespace nx
 
