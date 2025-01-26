@@ -187,7 +187,7 @@ private:
 
 #define NX_ASSERT(cond, msg, ...)                                              \
     if (!(cond)) {                                                             \
-        NX_PANIC(msg, ##__VA_ARGS__);                                          \
+        NX_PANIC(msg " file:%s line:%d", ##__VA_ARGS__, __FILE__, __LINE__);   \
     }
 
 #define NX_GET_BIT(x, bit)      (((x) >> (bit)) & 1)
