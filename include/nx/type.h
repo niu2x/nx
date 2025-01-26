@@ -18,6 +18,7 @@
 #include <string>
 #include <stdexcept>
 #include <variant>
+#include <chrono>
 
 namespace nx {
 
@@ -156,13 +157,8 @@ inline uint64_t ceil_pow2(uint64_t n)
     return n + 1;
 }
 
-inline bool is_pow2(uint8_t x) { return ((x - 1) & x) == 0; }
-
-inline bool is_pow2(uint16_t x) { return ((x - 1) & x) == 0; }
-
-inline bool is_pow2(uint32_t x) { return ((x - 1) & x) == 0; }
-
-inline bool is_pow2(uint64_t x) { return ((x - 1) & x) == 0; }
+template<class T>
+inline bool is_pow2(T x) { return ((x - 1) & x) == 0; }
 
 class CRC32 {
 public:
@@ -175,6 +171,19 @@ private:
     uint32_t table_[256];
     uint32_t initial_;
 };
+
+using TimePoint = std::chrono::time_point<std::chrono::system_clock>;
+using TimeDuration = double;
+
+inline TimePoint time_now() { return std::chrono::system_clock::now(); }
+
+inline TimeDuration time_diff(const TimePoint& t_old, const TimePoint& t_new)
+{
+    using std_ms = std::chrono::milliseconds;
+    return std::chrono::duration_cast<std_ms>(t_new - t_old).count();
+}
+
+
 
 } // namespace nx
 
