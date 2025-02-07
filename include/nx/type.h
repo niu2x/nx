@@ -22,6 +22,9 @@
 
 namespace nx {
 
+/**
+ * @brief byte array
+ */
 using ByteBuffer = std::vector<uint8_t>;
 
 template <class T>
@@ -67,23 +70,38 @@ constexpr size_t operator""_kb(unsigned long long int n) { return n * 1024; }
 // template <class T>
 // String to_string(const T&);
 
+/**
+ * @brief Open Mode
+ */
 enum class OpenMode {
     WRITE,
     READ,
 };
 
+/**
+ * @brief Result of successful io operation
+ */
 struct IO_Success {
     size_t bytes;
 };
 
+/**
+ * @brief End of file, a Unit struct.
+ */
 struct EndOfFile {
 };
 
+/**
+ * @brief IO Error
+ */
 enum class IO_Error {
     NOT_OPEN,
     IO_FAIL,
 };
 
+/**
+ * @brief Result of a read operation
+ */
 using ReadResult = Variant<IO_Error, EndOfFile, IO_Success>;
 
 class Read {
@@ -93,6 +111,9 @@ public:
     bool read_exact(void* buffer, size_t bytes);
 };
 
+/**
+ * @brief Result of a write operation
+ */
 using WriteResult = Variant<IO_Error, IO_Success>;
 
 class Write {
@@ -102,6 +123,14 @@ public:
     virtual bool write_all(const void* buffer, size_t bytes);
 };
 
+/**
+ * @brief      pipe
+ *
+ * @param      reader  The reader
+ * @param      writer  The writer
+ *
+ * @return     success?
+ */
 bool pipe(Read& reader, Write& writer);
 
 class MemoryFile : public Read, private Uncopyable {
@@ -160,11 +189,26 @@ inline uint64_t ceil_pow2(uint64_t n)
 template<class T>
 inline bool is_pow2(T x) { return ((x - 1) & x) == 0; }
 
+/**
+ * @brief      This class describes crc 32 algorithm.
+ */
 class CRC32 {
 public:
     CRC32();
 
+    /**
+     * @brief      put data
+     *
+     * @param[in]  buf   The buffer
+     * @param[in]  len   The length
+     */
     void update(const uint8_t* buf, size_t len);
+
+    /**
+     * @brief      get crc32 value
+     *
+     * @return     The value.
+     */
     uint32_t get_value() const;
 
 private:

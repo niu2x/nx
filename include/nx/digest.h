@@ -2,6 +2,9 @@
 
 #include <nx/type.h>
 
+/**
+ * @brief digest namespace
+ */
 namespace nx::digest {
 
 struct md5_context {
