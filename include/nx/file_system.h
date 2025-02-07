@@ -2,6 +2,9 @@
 
 #include <nx/type.h>
 
+/**
+ * @brief file_system namespace
+ */
 namespace nx::file_system {
 
 bool is_directory(const String& path);
