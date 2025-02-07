@@ -8,5 +8,4 @@ install-nx: build-nx
 test-cmake-library: install-nx
 	nx_DIR=dist/lib/cmake/niu2x cmake -S tests/cmake-library -Bbuild/tests/cmake-library
 	cmake --build build/tests/cmake-library
-
-
+	

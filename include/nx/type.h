@@ -64,12 +64,6 @@ void panic_fmt(const char* fmt, ...);
 
 constexpr size_t operator""_kb(unsigned long long int n) { return n * 1024; }
 
-// template <class FROM, class TO>
-// FROM from(TO);
-
-// template <class T>
-// String to_string(const T&);
-
 /**
  * @brief Open Mode
  */
@@ -219,8 +213,21 @@ private:
 using TimePoint = std::chrono::time_point<std::chrono::system_clock>;
 using TimeDuration = double;
 
+/**
+ * @brief      get current clock time
+ *
+ * @return     The time point.
+ */
 inline TimePoint time_now() { return std::chrono::system_clock::now(); }
 
+/**
+ * @brief      calculate time duration before old and now
+ *
+ * @param[in]  t_old  The old timepoint
+ * @param[in]  t_new  The now timepoint
+ *
+ * @return     The time duration.
+ */
 inline TimeDuration time_diff(const TimePoint& t_old, const TimePoint& t_new)
 {
     using std_ms = std::chrono::milliseconds;
