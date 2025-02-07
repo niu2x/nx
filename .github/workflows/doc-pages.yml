@@ -31,7 +31,7 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Build Doc
-        run:  apt install -y doxygen && doxygen
+        run:  sudo apt install -y doxygen && doxygen
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
 
