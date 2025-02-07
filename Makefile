@@ -1,5 +1,5 @@
 build-nx:
-	cmake -S. -Bbuild/nx;
+	cmake -S. -Bbuild/nx -DNX_STRICT=ON;
 	cmake --build build/nx;
 
 install-nx: build-nx

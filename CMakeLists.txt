@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.17.0 FATAL_ERROR)
 
-project(NX VERSION 0.0.1 LANGUAGES CXX C)
+project(NX VERSION 0.0.2 LANGUAGES CXX C)
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/cmake)
 include(warning_as_error)
@@ -10,7 +10,11 @@ include(CMakePackageConfigHelpers)
 set(LIB_NAME nx)
 add_library(${LIB_NAME} STATIC "")
 
-warning_as_error_enable(${LIB_NAME})
+option(NX_STRICT "strict mode" OFF)
+
+if(NX_STRICT)
+    warning_as_error_enable(${LIB_NAME})
+endif()
 
 set_target_properties(${LIB_NAME} PROPERTIES 
 	CXX_STANDARD 17

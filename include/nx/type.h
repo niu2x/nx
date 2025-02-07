@@ -18,6 +18,7 @@
 #include <string>
 #include <stdexcept>
 #include <variant>
+#include <chrono>
 
 namespace nx {
 
@@ -34,8 +35,14 @@ using String = std::string;
 template <class... T>
 using Variant = std::variant<T...>;
 
+template <class T>
+using UniquePtr = std::unique_ptr<T>;
+
+template <class T>
+using SharedPtr = std::shared_ptr<T>;
+
 /**
- * @brief      用于被private继承, 子类将不可被Copy, 不可被Move
+ * @brief      用于被private继承, 子类将不可被Copy
  */
 class Uncopyable {
 public:
@@ -45,29 +52,20 @@ public:
     Uncopyable(const Uncopyable&) = delete;
     Uncopyable& operator=(const Uncopyable&) = delete;
 
-    Uncopyable(Uncopyable&&) = delete;
-    Uncopyable& operator=(Uncopyable&&) = delete;
+    Uncopyable(Uncopyable&&) = default;
+    Uncopyable& operator=(Uncopyable&&) = default;
 };
 
-class RuntimeException : public std::exception {
-public:
-    explicit RuntimeException(const std::string& message)
-    : message_(message) { }
-    const char* what() const noexcept override { return message_.c_str(); }
-
-private:
-    std::string message_;
-};
 
 void panic_fmt(const char* fmt, ...);
 
 constexpr size_t operator""_kb(unsigned long long int n) { return n * 1024; }
 
-template <class FROM, class TO>
-FROM from(TO);
+// template <class FROM, class TO>
+// FROM from(TO);
 
-template <class T>
-String to_string(const T&);
+// template <class T>
+// String to_string(const T&);
 
 enum class OpenMode {
     WRITE,
@@ -159,13 +157,8 @@ inline uint64_t ceil_pow2(uint64_t n)
     return n + 1;
 }
 
-inline bool is_pow2(uint8_t x) { return ((x - 1) & x) == 0; }
-
-inline bool is_pow2(uint16_t x) { return ((x - 1) & x) == 0; }
-
-inline bool is_pow2(uint32_t x) { return ((x - 1) & x) == 0; }
-
-inline bool is_pow2(uint64_t x) { return ((x - 1) & x) == 0; }
+template<class T>
+inline bool is_pow2(T x) { return ((x - 1) & x) == 0; }
 
 class CRC32 {
 public:
@@ -179,6 +172,19 @@ private:
     uint32_t initial_;
 };
 
+using TimePoint = std::chrono::time_point<std::chrono::system_clock>;
+using TimeDuration = double;
+
+inline TimePoint time_now() { return std::chrono::system_clock::now(); }
+
+inline TimeDuration time_diff(const TimePoint& t_old, const TimePoint& t_new)
+{
+    using std_ms = std::chrono::milliseconds;
+    return std::chrono::duration_cast<std_ms>(t_new - t_old).count();
+}
+
+
+
 } // namespace nx
 
 /**
@@ -190,8 +196,13 @@ private:
 
 #define NX_ASSERT(cond, msg, ...)                                              \
     if (!(cond)) {                                                             \
-        NX_PANIC(msg, ##__VA_ARGS__);                                          \
+        NX_PANIC(msg " file:%s line:%d", ##__VA_ARGS__, __FILE__, __LINE__);   \
     }
 
-#define NX_GET_BIT_BOOL(byte, n) (NX_GET_BIT((byte), (n)) == 1)
-#define NX_GET_BIT(byte, n)      (((byte) >> n) & 1)
+#define NX_GET_BIT(x, bit)      (((x) >> (bit)) & 1)
+#define NX_SET_BIT(x, bit)      ((x) | (1 << (bit)))
+#define NX_CLEAR_BIT(x, bit)    ((x) & (~(1 << (bit))))
+
+#define NX_GET_BIT_BOOL(x, bit) (NX_GET_BIT((x), (bit)) == 1)
+#define NX_SET_BIT_BOOL(x, bit, value)                                         \
+    ((value) ? NX_SET_BIT((x), (bit)) : NX_CLEAR_BIT((x), (bit)))
