@@ -30,7 +30,7 @@
 
 namespace nx::digest {
 
-void md5_starts(struct md5_context* ctx)
+void md5_starts(struct MD5_Context* ctx)
 {
     ctx->total[0] = 0;
     ctx->total[1] = 0;
@@ -40,7 +40,7 @@ void md5_starts(struct md5_context* ctx)
     ctx->state[3] = 0x10325476;
 }
 
-void md5_process(struct md5_context* ctx, uint8_t data[64])
+void md5_process(struct MD5_Context* ctx, uint8_t data[64])
 {
     uint32_t A, B, C, D, X[16];
 
@@ -164,7 +164,7 @@ void md5_process(struct md5_context* ctx, uint8_t data[64])
     ctx->state[3] += D;
 }
 
-void md5_update(struct md5_context* ctx, uint8_t* input, uint32_t length)
+void md5_update(struct MD5_Context* ctx, uint8_t* input, uint32_t length)
 {
     uint32_t left, fill;
 
@@ -205,7 +205,7 @@ static uint8_t md5_padding[64] = { 0x80, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                                    0,    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                                    0,    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
-void md5_finish(struct md5_context* ctx, uint8_t digest[16])
+void md5_finish(struct MD5_Context* ctx, uint8_t digest[16])
 {
     uint32_t last, padn;
     uint8_t msglen[8];
