@@ -13,11 +13,27 @@ struct MD5_Context {
     uint8_t buffer[64];
 };
 
+/**
+ * @brief      MD5 algorithm
+ */
 class MD5 {
 public:
     MD5();
     void reset();
+
+    /**
+     * @brief      append more data to calculate md5
+     *
+     * @param[in]  input   The input
+     * @param[in]  length  The length
+     */
     void update(const uint8_t* input, uint32_t length);
+
+    /**
+     * @brief      get md5
+     *
+     * @param      digest  The buffer to accept md5
+     */
     void finish(uint8_t digest[16]);
 
 private:
