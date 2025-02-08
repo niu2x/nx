@@ -13,11 +13,42 @@ struct MD5_Context {
     uint8_t buffer[64];
 };
 
-void md5_starts(struct MD5_Context* ctx);
-void md5_update(struct MD5_Context* ctx, uint8_t* input, uint32_t length);
-void md5_finish(struct MD5_Context* ctx, uint8_t digest[16]);
+class MD5 {
+public:
+    MD5();
+    void reset();
+    void update(const uint8_t* input, uint32_t length);
+    void finish(uint8_t digest[16]);
 
-/* Uses a static buffer, so beware of how it's used. */
-const char* md5_ascii_str(uint8_t digest[16]);
+private:
+    MD5_Context context_;
+};
+
+/**
+ * @brief      This class describes crc 32 algorithm.
+ */
+class CRC32 {
+public:
+    CRC32();
+
+    /**
+     * @brief      put data
+     *
+     * @param[in]  buf   The buffer
+     * @param[in]  len   The length
+     */
+    void update(const uint8_t* buf, size_t len);
+
+    /**
+     * @brief      get crc32 value
+     *
+     * @return     The value.
+     */
+    uint32_t get_value() const;
+
+private:
+    uint32_t table_[256];
+    uint32_t initial_;
+};
 
 } // namespace nx::digest

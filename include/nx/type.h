@@ -183,33 +183,6 @@ inline uint64_t ceil_pow2(uint64_t n)
 template<class T>
 inline bool is_pow2(T x) { return ((x - 1) & x) == 0; }
 
-/**
- * @brief      This class describes crc 32 algorithm.
- */
-class CRC32 {
-public:
-    CRC32();
-
-    /**
-     * @brief      put data
-     *
-     * @param[in]  buf   The buffer
-     * @param[in]  len   The length
-     */
-    void update(const uint8_t* buf, size_t len);
-
-    /**
-     * @brief      get crc32 value
-     *
-     * @return     The value.
-     */
-    uint32_t get_value() const;
-
-private:
-    uint32_t table_[256];
-    uint32_t initial_;
-};
-
 using TimePoint = std::chrono::time_point<std::chrono::system_clock>;
 using TimeDuration = double;
 
