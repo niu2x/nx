@@ -12,5 +12,5 @@ namespace fs = nx::file_system;
 
 namespace nx {
 namespace CRC32 = nx::digest::CRC32;
-namespace MD5_Context = nx::digest::MD5_Context;
+namespace MD5 = nx::digest::MD5;
 } // namespace nx
