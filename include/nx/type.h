@@ -139,6 +139,10 @@ private:
 };
 
 using TimePoint = std::chrono::time_point<std::chrono::system_clock>;
+
+/**
+ * @brief      milliseconds
+ */
 using TimeDuration = double;
 
 /**
