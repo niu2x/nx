@@ -6,4 +6,6 @@ target_sources(${LIB_NAME} PRIVATE
 	fmt_print.cpp
 )
 
-target_compile_definitions(${LIB_NAME} PRIVATE NX_USE_STD_FS)
+if("${CMAKE_SYSTEM_NAME}" STREQUAL "Linux")
+	target_compile_definitions(${LIB_NAME} PRIVATE USE_STD_FILE_SYSTEM)
+endif()		

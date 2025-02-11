@@ -1,7 +1,10 @@
 #include <nx/file_system.h>
-#include <sys/stat.h>
-// #include <filesystem>
-// namespace std_fs = std::filesystem;
+
+#if defined(USE_STD_FILE_SYSTEM)
+    #include <filesystem>
+#else
+    #include <sys/stat.h>
+#endif
 
 #include "log.h"
 
@@ -9,39 +12,52 @@ namespace nx::file_system {
 
 bool is_directory(const String& path)
 {
-    // return std_fs::is_directory(path);
+#if defined(USE_STD_FILE_SYSTEM)
+    return std::filesystem::is_directory(path);
+#else
     struct stat info;
     if (stat(path.c_str(), &info) != 0) {
         return false; // Cannot access path
     }
     return (info.st_mode & S_IFDIR) != 0;
+#endif
 }
 
 String get_file_name(const String& path)
 {
-    // return std_fs::path(path).filename();
+#if defined(USE_STD_FILE_SYSTEM)
+    return std::filesystem::path(path).filename();
+#else
+
     size_t pos = path.find_last_of("/\\");
     if (pos == String::npos) {
         return path; // No directory separators found
     }
     return path.substr(pos + 1);
+#endif
 }
 
 String get_parent_path(const String& path)
 {
-    // return std_fs::path(path).parent_path();
+#if defined(USE_STD_FILE_SYSTEM)
+    return std::filesystem::path(path).parent_path();
+#else
     size_t pos = path.find_last_of("/\\");
     if (pos == String::npos) {
         return ""; // No parent path
     }
     return path.substr(0, pos);
+#endif
 }
 
 bool exists(const String& path)
 {
-    // return std_fs::exists(path);
+#if defined(USE_STD_FILE_SYSTEM)
+    return std::filesystem::exists(path);
+#else
     struct stat buffer;
     return (stat(path.c_str(), &buffer) == 0);
+#endif
 }
 
 bool is_file(const String& path)
