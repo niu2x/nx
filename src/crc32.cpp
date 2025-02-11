@@ -1,6 +1,6 @@
 #include <cstdint>
 #include <cstddef>
-#include <nx/type.h>
+#include <nx/digest.h>
 
 static void __generate_table(uint32_t table[256])
 {
@@ -29,7 +29,7 @@ __update(uint32_t table[256], uint32_t initial, const void* buf, size_t len)
     return c ^ 0xFFFFFFFF;
 }
 
-namespace nx {
+namespace nx::digest {
 
 CRC32::CRC32() : initial_(0) { __generate_table(table_); }
 
@@ -40,4 +40,4 @@ void CRC32::update(const uint8_t* buf, size_t len)
 
 uint32_t CRC32::get_value() const { return initial_; }
 
-} // namespace nx
+} // namespace nx::digest

@@ -138,6 +138,34 @@ private:
     size_t read_pos_;
 };
 
+using TimePoint = std::chrono::time_point<std::chrono::system_clock>;
+
+/**
+ * @brief      milliseconds
+ */
+using TimeDuration = double;
+
+/**
+ * @brief      get current clock time
+ *
+ * @return     The time point.
+ */
+inline TimePoint time_now() { return std::chrono::system_clock::now(); }
+
+/**
+ * @brief      calculate time duration before old and now
+ *
+ * @param[in]  t_old  The old timepoint
+ * @param[in]  t_new  The now timepoint
+ *
+ * @return     The time duration.
+ */
+inline TimeDuration time_diff(const TimePoint& t_old, const TimePoint& t_new)
+{
+    using std_ms = std::chrono::milliseconds;
+    return std::chrono::duration_cast<std_ms>(t_new - t_old).count();
+}
+
 inline uint8_t ceil_pow2(uint8_t n)
 {
     n -= 1;
@@ -182,59 +210,6 @@ inline uint64_t ceil_pow2(uint64_t n)
 
 template<class T>
 inline bool is_pow2(T x) { return ((x - 1) & x) == 0; }
-
-/**
- * @brief      This class describes crc 32 algorithm.
- */
-class CRC32 {
-public:
-    CRC32();
-
-    /**
-     * @brief      put data
-     *
-     * @param[in]  buf   The buffer
-     * @param[in]  len   The length
-     */
-    void update(const uint8_t* buf, size_t len);
-
-    /**
-     * @brief      get crc32 value
-     *
-     * @return     The value.
-     */
-    uint32_t get_value() const;
-
-private:
-    uint32_t table_[256];
-    uint32_t initial_;
-};
-
-using TimePoint = std::chrono::time_point<std::chrono::system_clock>;
-using TimeDuration = double;
-
-/**
- * @brief      get current clock time
- *
- * @return     The time point.
- */
-inline TimePoint time_now() { return std::chrono::system_clock::now(); }
-
-/**
- * @brief      calculate time duration before old and now
- *
- * @param[in]  t_old  The old timepoint
- * @param[in]  t_new  The now timepoint
- *
- * @return     The time duration.
- */
-inline TimeDuration time_diff(const TimePoint& t_old, const TimePoint& t_new)
-{
-    using std_ms = std::chrono::milliseconds;
-    return std::chrono::duration_cast<std_ms>(t_new - t_old).count();
-}
-
-
 
 } // namespace nx
 
