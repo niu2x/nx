@@ -25,7 +25,7 @@
 
 ### Examples,
 
-```c++
+```
 TimePoint before = time_now();
 // do something
 TimePoint after = time_now();
