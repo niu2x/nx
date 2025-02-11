@@ -118,7 +118,7 @@ public:
 };
 
 /**
- * @brief      pipe
+ * @brief      pipe data from reader to writer
  *
  * @param      reader  The reader
  * @param      writer  The writer
