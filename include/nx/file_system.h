@@ -7,15 +7,39 @@
  */
 namespace nx::file_system {
 
+/**
+ * @brief      Determines whether the specified path is directory.
+ *
+ * @param[in]  path  The path
+ *
+ * @return     True if the specified path is directory, False otherwise.
+ */
 bool is_directory(const String& path);
 
+/**
+ * @brief      Determines whether the specified path is file.
+ *
+ * @param[in]  path  The path
+ *
+ * @return     True if the specified path is file, False otherwise.
+ */
 bool is_file(const String& path);
 
+/**
+ * @brief      Determines whether the specified file exist
+ *
+ * @param[in]  path  The path of file
+ *
+ * @return     True if the specified file exist, False otherwise.
+ */
 bool exists(const String& path);
+
+bool make_dirs(const String& path);
 
 class File : public Read, public Write, private Uncopyable {
 public:
     explicit File(const String& p = "");
+
     File(const String& p, FILE* file, OpenMode m);
     ~File();
 
@@ -41,10 +65,42 @@ private:
     bool strong_ref_;
 };
 
+/**
+ * @brief      get stdin file
+ *
+ * @return     stdin file
+ */
 File& in();
+
+/**
+ * @brief      get stdout file
+ *
+ * @return     stdout file
+ */
 File& out();
+
+/**
+ * @brief      get stderr file
+ *
+ * @return     stderr file
+ */
 File& err();
 
+/**
+ * @brief      Gets the file name.
+ *
+ * @param[in]  path  The path
+ *
+ * @return     The file name.
+ */
 String get_file_name(const String& path);
+
+/**
+ * @brief      Gets the parent path.
+ *
+ * @param[in]  path  The path
+ *
+ * @return     The parent path.
+ */
 String get_parent_path(const String& path);
 }

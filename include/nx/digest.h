@@ -7,18 +7,24 @@
  */
 namespace nx::digest {
 
-struct MD5_Context {
-    uint32_t total[2];
-    uint32_t state[4];
-    uint8_t buffer[64];
-};
-
 /**
  * @brief      MD5 algorithm
+ *             ### Example
+ *
+ *                 uint8_t digest[16];
+ *                 MD5 md5;
+ *
+ *                 md5.update("hello", 5);
+ *                 md5.finish(digest);
+ *
  */
 class MD5 {
 public:
     MD5();
+
+    /**
+     * @brief      Resets the object.
+     */
     void reset();
 
     /**
@@ -37,11 +43,32 @@ public:
     void finish(uint8_t digest[16]);
 
 private:
+    struct MD5_Context {
+        uint32_t total[2];
+        uint32_t state[4];
+        uint8_t buffer[64];
+    };
+
     MD5_Context context_;
+
+    static void md5_update(MD5_Context* ctx,
+                           const uint8_t* input,
+                           uint32_t length);
+    static void md5_finish(MD5_Context* ctx, uint8_t digest[16]);
+    static void md5_process(MD5_Context* ctx, const uint8_t data[64]);
+    static void md5_starts(MD5_Context* ctx);
 };
 
 /**
  * @brief      This class describes crc 32 algorithm.
+ *             ### Example
+ *
+ *                 uint8_t digest[16];
+ *                 CRC32 crc32;
+ *
+ *                 crc32.update("hello", 5);
+ *                 uint32_t checksum = crc32.get_value();
+ *
  */
 class CRC32 {
 public:

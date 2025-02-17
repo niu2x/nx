@@ -30,14 +30,7 @@
 
 namespace nx::digest {
 
-void md5_starts(struct MD5_Context* ctx);
-void md5_update(struct MD5_Context* ctx, const uint8_t* input, uint32_t length);
-void md5_finish(struct MD5_Context* ctx, uint8_t digest[16]);
-
-/* Uses a static buffer, so beware of how it's used. */
-const char* md5_ascii_str(uint8_t digest[16]);
-
-void md5_starts(struct MD5_Context* ctx)
+void MD5::md5_starts(MD5_Context* ctx)
 {
     ctx->total[0] = 0;
     ctx->total[1] = 0;
@@ -47,7 +40,7 @@ void md5_starts(struct MD5_Context* ctx)
     ctx->state[3] = 0x10325476;
 }
 
-void md5_process(struct MD5_Context* ctx, const uint8_t data[64])
+void MD5::md5_process(MD5_Context* ctx, const uint8_t data[64])
 {
     uint32_t A, B, C, D, X[16];
 
@@ -171,7 +164,7 @@ void md5_process(struct MD5_Context* ctx, const uint8_t data[64])
     ctx->state[3] += D;
 }
 
-void md5_update(struct MD5_Context* ctx, const uint8_t* input, uint32_t length)
+void MD5::md5_update(MD5_Context* ctx, const uint8_t* input, uint32_t length)
 {
     uint32_t left, fill;
 
@@ -206,13 +199,12 @@ void md5_update(struct MD5_Context* ctx, const uint8_t* input, uint32_t length)
     }
 }
 
-static uint8_t md5_padding[64] = { 0x80, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                                   0,    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                                   0,    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                                   0,    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                                   0,    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+uint8_t md5_padding[64] = { 0x80, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                            0,    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                            0,    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                            0,    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
-void md5_finish(struct MD5_Context* ctx, uint8_t digest[16])
+void MD5::md5_finish(MD5_Context* ctx, uint8_t digest[16])
 {
     uint32_t last, padn;
     uint8_t msglen[8];
@@ -232,20 +224,16 @@ void md5_finish(struct MD5_Context* ctx, uint8_t digest[16])
     PUT_UINT32(ctx->state[3], digest, 12);
 }
 
-/* Uses a static buffer, so beware of how it's used. */
-const char* md5_ascii_str(uint8_t digest[16])
-{
-    static char str[33];
-    static char trans[16] = { '0', '1', '2', '3', '4', '5', '6', '7',
-                              '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
-    int x;
-
-    for (x = 0; x < 16; x++) {
-        str[x * 2] = trans[digest[x] & 0x0F];
-        str[x * 2 + 1] = trans[digest[x] >> 4];
-    }
-    return (str);
-}
+// void hex_encode(const uint8_t* digest, size_t len, char* output)
+// {
+//     static char trans[16] = { '0', '1', '2', '3', '4', '5', '6', '7',
+//                               '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
+//     int x;
+//     for (x = 0; x < len; x++) {
+//         output[x * 2] = trans[digest[x] >> 4];
+//         output[x * 2 + 1] = trans[digest[x] & 0x0F];
+//     }
+// }
 
 MD5::MD5() { reset(); }
 

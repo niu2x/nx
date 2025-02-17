@@ -2,7 +2,9 @@
 #include <cstddef>
 #include <nx/digest.h>
 
-static void __generate_table(uint32_t table[256])
+namespace nx::digest {
+
+void __generate_table(uint32_t table[256])
 {
     uint32_t polynomial = 0xEDB88320;
     for (uint32_t i = 0; i < 256; i++) {
@@ -18,7 +20,7 @@ static void __generate_table(uint32_t table[256])
     }
 }
 
-static uint32_t
+uint32_t
 __update(uint32_t table[256], uint32_t initial, const void* buf, size_t len)
 {
     uint32_t c = initial ^ 0xFFFFFFFF;
@@ -28,8 +30,6 @@ __update(uint32_t table[256], uint32_t initial, const void* buf, size_t len)
     }
     return c ^ 0xFFFFFFFF;
 }
-
-namespace nx::digest {
 
 CRC32::CRC32() : initial_(0) { __generate_table(table_); }
 
