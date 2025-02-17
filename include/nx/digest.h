@@ -15,10 +15,22 @@ struct MD5_Context {
 
 /**
  * @brief      MD5 algorithm
+ *             ### Example
+ *
+ *                 uint8_t digest[16];
+ *                 MD5 md5;
+ *
+ *                 md5.update("hello", 5);
+ *                 md5.finish(digest);
+ *
  */
 class MD5 {
 public:
     MD5();
+
+    /**
+     * @brief      Resets the object.
+     */
     void reset();
 
     /**
@@ -42,6 +54,14 @@ private:
 
 /**
  * @brief      This class describes crc 32 algorithm.
+ *             ### Example
+ *
+ *                 uint8_t digest[16];
+ *                 CRC32 crc32;
+ *
+ *                 crc32.update("hello", 5);
+ *                 uint32_t checksum = crc32.get_value();
+ *
  */
 class CRC32 {
 public:
