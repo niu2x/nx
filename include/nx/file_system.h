@@ -34,6 +34,8 @@ bool is_file(const String& path);
  */
 bool exists(const String& path);
 
+bool make_dirs(const String& path);
+
 class File : public Read, public Write, private Uncopyable {
 public:
     explicit File(const String& p = "");

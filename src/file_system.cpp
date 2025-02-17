@@ -65,6 +65,13 @@ bool is_file(const String& path)
     return exists(path) && !(is_directory(path));
 }
 
+// todo: make dirs recursive, if not exists
+bool make_dirs(const String& path)
+{
+    (void)path;
+    return false;
+}
+
 File::File(const String& p) : path_(p), fp_(nullptr), strong_ref_(true) { }
 
 File::~File() { close(); }
