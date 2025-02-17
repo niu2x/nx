@@ -7,12 +7,6 @@
  */
 namespace nx::digest {
 
-struct MD5_Context {
-    uint32_t total[2];
-    uint32_t state[4];
-    uint8_t buffer[64];
-};
-
 /**
  * @brief      MD5 algorithm
  *             ### Example
@@ -49,7 +43,20 @@ public:
     void finish(uint8_t digest[16]);
 
 private:
+    struct MD5_Context {
+        uint32_t total[2];
+        uint32_t state[4];
+        uint8_t buffer[64];
+    };
+
     MD5_Context context_;
+
+    static void md5_update(MD5_Context* ctx,
+                           const uint8_t* input,
+                           uint32_t length);
+    static void md5_finish(MD5_Context* ctx, uint8_t digest[16]);
+    static void md5_process(MD5_Context* ctx, const uint8_t data[64]);
+    static void md5_starts(MD5_Context* ctx);
 };
 
 /**
