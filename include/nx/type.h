@@ -97,12 +97,14 @@ enum class IO_Error {
  * @brief Result of a read operation
  */
 using ReadResult = Variant<IO_Error, EndOfFile, IO_Success>;
+using ReadAllResult = Variant<IO_Error, ByteBuffer>;
 
 class Read {
 public:
     virtual ~Read() = 0;
     virtual ReadResult read(void* buffer, size_t bytes) = 0;
     bool read_exact(void* buffer, size_t bytes);
+    ReadAllResult read_all();
 };
 
 /**
