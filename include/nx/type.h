@@ -213,6 +213,9 @@ inline uint64_t ceil_pow2(uint64_t n)
 template<class T>
 inline bool is_pow2(T x) { return ((x - 1) & x) == 0; }
 
+using PrintLike = void (*)(const char* fmt, ...);
+void set_error_log(PrintLike fn);
+
 } // namespace nx
 
 /**
