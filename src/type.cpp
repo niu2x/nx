@@ -9,7 +9,7 @@ bool Read::read_exact(void* buffer, size_t bytes)
     auto* ptr = (uint8_t*)buffer;
     while (bytes) {
         auto result = read(ptr, bytes);
-        if (std::holds_alternative<IO_Success>(result)) { }
+
         if (auto* r = std::get_if<IO_Success>(&result)) {
             bytes -= r->bytes;
             ptr += r->bytes;
@@ -18,6 +18,34 @@ bool Read::read_exact(void* buffer, size_t bytes)
         }
     }
     return true;
+}
+
+ReadAllResult Read::read_all()
+{
+    ByteBuffer data;
+    size_t bytes = 0;
+    size_t capacity = 1024;
+
+    data.resize(capacity);
+
+    while (true) {
+        auto result = read(data.data() + bytes, capacity - bytes);
+        if (std::holds_alternative<EndOfFile>(result)) {
+            break;
+        } else if (auto* r = std::get_if<IO_Success>(&result)) {
+            bytes += r->bytes;
+            if (bytes == capacity) {
+                capacity <<= 1;
+                data.resize(capacity);
+            }
+
+        } else {
+            return std::get<IO_Error>(result);
+        }
+    }
+
+    data.resize(bytes);
+    return data;
 }
 
 Write::~Write() { }
