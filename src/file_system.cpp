@@ -6,6 +6,9 @@
     #include <sys/stat.h>
 #endif
 
+#include <sys/stat.h>
+#include <unistd.h>
+
 #include "log.h"
 
 namespace nx::file_system {
@@ -65,11 +68,61 @@ bool is_file(const String& path)
     return exists(path) && !(is_directory(path));
 }
 
-// todo: make dirs recursive, if not exists
 bool make_dirs(const String& path)
 {
-    (void)path;
-    return false;
+    // 空路径，返回true
+    if (path.empty()) {
+        return true;
+    }
+
+    // 检查路径是否存在
+    if (access(path.c_str(), F_OK) != -1) {
+        // 已存在，返回true
+        return true;
+    }
+
+    // 找到最后一个'/'的位置
+    size_t last_slash = path.rfind('/');
+
+    // 分割父目录和当前目录
+    String parent_dir, current_dir;
+
+    if (last_slash == String::npos) {
+        // 没有'/'，表示在当前目录下，直接创建
+        // 但需要确保父目录存在，即当前路径是否正确
+        // 其实，这种情况下，parent_dir应该是当前路径的前缀，比如可能为空
+        // 但可能需要递归调用父目录
+        // 这里可能需要重新考虑，比如，将parent_dir设为path的父目录，可能为空
+        // 这时，current_dir是整个path
+        parent_dir = "";
+        current_dir = path;
+    } else {
+        parent_dir = path.substr(0, last_slash);
+        current_dir = path.substr(last_slash + 1);
+
+        // 特殊情况处理，如果路径以'/'结尾，current_dir可能为空
+        if (current_dir.empty()) {
+            // 表示路径本身就是父目录，无需进一步处理
+            // 但此时，path是类似"/a/b/", 所以需要确保父目录存在
+            // 直接调用递归处理parent_dir
+            return make_dirs(parent_dir);
+        }
+    }
+
+    // 递归创建父目录
+    if (parent_dir != "") {
+        if (!make_dirs(parent_dir)) {
+            return false;
+        }
+    }
+
+    // 现在父目录已经存在，尝试创建当前目录
+    if (mkdir(path.c_str(), 0777) == -1) {
+        // 创建失败，返回false
+        return false;
+    }
+
+    return true;
 }
 
 File::File(const String& p) : path_(p), fp_(nullptr), strong_ref_(true) { }

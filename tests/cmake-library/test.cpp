@@ -11,5 +11,9 @@ int main()
     printf("ceil_pow2(16) == %d\n", nx::ceil_pow2(16u));
     printf("ceil_pow2(17) == %d\n", nx::ceil_pow2(17u));
 
+    // nx::fs::make_dirs("xx");
+    bool x = nx::fs::make_dirs("xxdd/f1/22/32/x/");
+    printf("x: %d\n", x);
+
     return 0;
 }
