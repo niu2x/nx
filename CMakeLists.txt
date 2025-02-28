@@ -1,6 +1,6 @@
-cmake_minimum_required(VERSION 3.17.0 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.13.0 FATAL_ERROR)
 
-project(NX VERSION 0.1.0 LANGUAGES CXX C)
+project(NX VERSION 0.1.1 LANGUAGES CXX C)
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/cmake)
 include(warning_as_error)
