@@ -3,6 +3,7 @@ target_sources(${LIB_NAME} PRIVATE
 	type.cpp
 	md5.cpp
 	crc32.cpp
+	log.cpp
 	fmt_print.cpp
 )
 
