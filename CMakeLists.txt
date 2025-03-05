@@ -11,6 +11,7 @@ set(LIB_NAME nx)
 add_library(${LIB_NAME} STATIC "")
 
 option(NX_STRICT "strict mode" OFF)
+option(NX_BUILD_TEST "build test" OFF)
 
 if(NX_STRICT)
     warning_as_error_enable(${LIB_NAME})
@@ -65,3 +66,9 @@ install(FILES
     ${CMAKE_CURRENT_BINARY_DIR}/${LIB_NAME}-config-version.cmake
     DESTINATION lib/cmake/niu2x
 )
+
+
+if(NX_BUILD_TEST)
+    message(STATUS "build test")
+    
+endif()
