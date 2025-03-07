@@ -77,4 +77,9 @@ if(NX_BUILD_TEST)
         URL https://github.com/google/googletest/archive/refs/tags/release-1.12.1.zip
     )
     FetchContent_MakeAvailable(googletest)
+
+    add_executable(unittest tests/test.cpp)
+    target_link_libraries(unittest PRIVATE gtest_main ${LIB_NAME})
+    add_test(NAME UnitTest COMMAND unittest)
+
 endif()
