@@ -241,4 +241,14 @@ String join_path(const String& p1, const String& p2)
     return ss.str();
 }
 
+ReadAllResult read_file(const String& path)
+{
+    File file(path);
+    if (!file.open_read()) {
+        return IO_Error::NOT_OPEN;
+    }
+
+    return file.read_all();
+}
+
 } // namespace nx::file_system

@@ -105,5 +105,8 @@ String get_file_name(const String& path);
 String get_parent_path(const String& path);
 
 String join_path(const String& dir, const String& path);
+
 char get_path_separator();
+
+ReadAllResult read_file(const String& path);
 }
