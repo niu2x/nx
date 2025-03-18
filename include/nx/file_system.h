@@ -38,7 +38,7 @@ bool make_dirs(const String& path);
 
 class File : public Read, public Write, private Uncopyable {
 public:
-    explicit File(const String& p = "");
+    explicit File(const String& p);
 
     File(const String& p, FILE* file, OpenMode m);
     ~File();
