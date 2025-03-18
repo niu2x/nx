@@ -80,6 +80,12 @@ if(NX_BUILD_TEST)
 
     add_executable(unittest tests/test.cpp)
     target_link_libraries(unittest PRIVATE gtest_main ${LIB_NAME})
+
+    set_target_properties(unittest PROPERTIES 
+        CXX_STANDARD 17
+    )
+
+
     add_test(NAME UnitTest COMMAND unittest)
 
 endif()
