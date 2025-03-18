@@ -103,4 +103,7 @@ String get_file_name(const String& path);
  * @return     The parent path.
  */
 String get_parent_path(const String& path);
+
+String join_path(const String& dir, const String& path);
+char get_path_separator();
 }

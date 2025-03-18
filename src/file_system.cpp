@@ -8,6 +8,7 @@
 
 #include <sys/stat.h>
 #include <unistd.h>
+#include <sstream>
 
 #include "log.h"
 
@@ -214,5 +215,30 @@ File& File::err()
 File& in() { return File::in(); }
 File& out() { return File::out(); }
 File& err() { return File::err(); }
+
+char get_path_separator()
+{
+#if defined(NX_PLATFORM_WINDOW)
+    return '\\';
+#else
+    return '/';
+#endif
+}
+
+String join_path(const String& p1, const String& p2)
+{
+    std::stringstream ss;
+
+    char path_separator = get_path_separator();
+    if (p1.size() > 0 && *(p1.end() - 1) == path_separator) {
+        ss << p1.substr(0, p1.size() - 1);
+    } else {
+        ss << p1;
+    }
+    ss << path_separator;
+    ss << p2;
+
+    return ss.str();
+}
 
 } // namespace nx::file_system
