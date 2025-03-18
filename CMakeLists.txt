@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.13.0 FATAL_ERROR)
 
-project(NX VERSION 0.1.2 LANGUAGES CXX C)
+project(NX VERSION 0.1.3 LANGUAGES CXX C)
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/cmake)
 include(warning_as_error)
@@ -80,6 +80,12 @@ if(NX_BUILD_TEST)
 
     add_executable(unittest tests/test.cpp)
     target_link_libraries(unittest PRIVATE gtest_main ${LIB_NAME})
+
+    set_target_properties(unittest PROPERTIES 
+        CXX_STANDARD 17
+    )
+
+
     add_test(NAME UnitTest COMMAND unittest)
 
 endif()

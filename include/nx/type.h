@@ -20,6 +20,12 @@
 #include <variant>
 #include <chrono>
 
+#if defined(WIN32)
+    #define NX_PLATFORM_WINDOW
+#else
+    #define NX_PLATFORM_POSIX
+#endif
+
 namespace nx {
 
 /**
