@@ -97,4 +97,7 @@ private:
 String md5(const uint8_t *data, size_t len);
 String md5(const char *data);
 
+uint32_t crc32(const uint8_t* data, size_t len);
+uint32_t crc32(const char* data);
+
 } // namespace nx::digest

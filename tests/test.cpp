@@ -22,3 +22,5 @@ TEST(math, ceil_pow2) {
 TEST(digest, md5) {  
 	EXPECT_EQ(nx::md5("hello, world\n"), "22c3683b094136c3398391ae71b20f04");
 }
+
+TEST(digest, crc32) { EXPECT_EQ(nx::crc32("hello, world"), 0xffab723a); }

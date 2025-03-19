@@ -40,4 +40,16 @@ void CRC32::update(const uint8_t* buf, size_t len)
 
 uint32_t CRC32::get_value() const { return initial_; }
 
+uint32_t crc32(const uint8_t* data, size_t len)
+{
+    CRC32 crc32_context;
+    crc32_context.update(data, len);
+    return crc32_context.get_value();
+}
+
+uint32_t crc32(const char* data)
+{
+    return crc32((const uint8_t*)data, strlen(data));
+}
+
 } // namespace nx::digest
