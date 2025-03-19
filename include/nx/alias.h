@@ -19,5 +19,6 @@ using CRC32 = nx::digest::CRC32;
 using MD5 = nx::digest::MD5;
 using nx::digest::crc32;
 using nx::digest::md5;
+using nx::digest::sha256;
 
 } // namespace nx

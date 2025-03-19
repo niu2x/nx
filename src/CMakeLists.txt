@@ -1,8 +1,12 @@
 target_sources(${LIB_NAME} PRIVATE
 	file_system.cpp
 	type.cpp
+
 	md5.cpp
+	sha256.cpp
 	crc32.cpp
+	digest.cpp
+
 	log.cpp
 	fmt_print.cpp
 )

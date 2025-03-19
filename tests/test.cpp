@@ -23,4 +23,11 @@ TEST(digest, md5) {
 	EXPECT_EQ(nx::md5("hello, world\n"), "22c3683b094136c3398391ae71b20f04");
 }
 
+TEST(digest, sha256)
+{
+    EXPECT_EQ(
+        nx::sha256("hello, world\n"),
+        "853ff93762a06ddbf722c4ebe9ddd66d8f63ddaea97f521c3ecc20da7c976020");
+}
+
 TEST(digest, crc32) { EXPECT_EQ(nx::crc32("hello, world"), 0xffab723a); }
