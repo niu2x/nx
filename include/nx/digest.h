@@ -94,4 +94,54 @@ private:
     uint32_t initial_;
 };
 
+class SHA256 {
+public:
+    SHA256();
+
+    /**
+     * @brief      Resets the object.
+     */
+    void reset();
+
+    /**
+     * @brief      append more data to calculate md5
+     *
+     * @param[in]  input   The input
+     * @param[in]  length  The length
+     */
+    void update(const uint8_t* input, uint32_t length);
+
+    /**
+     * @brief      get md5
+     *
+     * @param      digest  The buffer to accept md5
+     */
+    void finish(uint8_t digest[32]);
+
+    struct SHA256_Context {
+        uint8_t buf[64];
+        uint32_t hash[8];
+        uint32_t bits[2];
+        uint32_t len;
+        uint32_t rfu__;
+        uint32_t W[64];
+    };
+
+private:
+    SHA256_Context context_;
+    static void sha256_init(SHA256_Context* ctx);
+    static void sha256_hash(SHA256_Context* ctx, const void* data, size_t len);
+    static void sha256_done(SHA256_Context* ctx, uint8_t* hash);
+    // void sha256(const void *data, size_t len, uint8_t *hash);
+};
+
+String md5(const uint8_t *data, size_t len);
+String md5(const char *data);
+
+String sha256(const uint8_t* data, size_t len);
+String sha256(const char* data);
+
+uint32_t crc32(const uint8_t* data, size_t len);
+uint32_t crc32(const char* data);
+
 } // namespace nx::digest

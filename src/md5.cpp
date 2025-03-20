@@ -224,16 +224,7 @@ void MD5::md5_finish(MD5_Context* ctx, uint8_t digest[16])
     PUT_UINT32(ctx->state[3], digest, 12);
 }
 
-// void hex_encode(const uint8_t* digest, size_t len, char* output)
-// {
-//     static char trans[16] = { '0', '1', '2', '3', '4', '5', '6', '7',
-//                               '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
-//     int x;
-//     for (x = 0; x < len; x++) {
-//         output[x * 2] = trans[digest[x] >> 4];
-//         output[x * 2 + 1] = trans[digest[x] & 0x0F];
-//     }
-// }
+
 
 MD5::MD5() { reset(); }
 
