@@ -15,4 +15,4 @@ cmake-library: install-nx
 
 update-version:
 	change-version -i -v $(ver) CMake ./CMakeLists.txt
-	change-version -i -v $(ver) Doxyfile ./Doxyfile
+	change-version -i -v $(ver) Doxygen ./Doxyfile
