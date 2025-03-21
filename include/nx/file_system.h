@@ -14,7 +14,7 @@ namespace nx::file_system {
  *
  * @return     True if the specified path is directory, False otherwise.
  */
-bool is_directory(const String& path);
+NX_API bool is_directory(const String& path);
 
 /**
  * @brief      Determines whether the specified path is file.
@@ -23,7 +23,7 @@ bool is_directory(const String& path);
  *
  * @return     True if the specified path is file, False otherwise.
  */
-bool is_file(const String& path);
+NX_API bool is_file(const String& path);
 
 /**
  * @brief      Determines whether the specified file exist
@@ -32,9 +32,9 @@ bool is_file(const String& path);
  *
  * @return     True if the specified file exist, False otherwise.
  */
-bool exists(const String& path);
+NX_API bool exists(const String& path);
 
-bool make_dirs(const String& path);
+NX_API bool make_dirs(const String& path);
 
 class File : public Read, public Write, private Uncopyable {
 public:
@@ -70,21 +70,22 @@ private:
  *
  * @return     stdin file
  */
-File& in();
+
+NX_API File& in();
 
 /**
  * @brief      get stdout file
  *
  * @return     stdout file
  */
-File& out();
+NX_API File& out();
 
 /**
  * @brief      get stderr file
  *
  * @return     stderr file
  */
-File& err();
+NX_API File& err();
 
 /**
  * @brief      Gets the file name.
@@ -93,7 +94,7 @@ File& err();
  *
  * @return     The file name.
  */
-String get_file_name(const String& path);
+NX_API String get_file_name(const String& path);
 
 /**
  * @brief      Gets the parent path.
@@ -102,11 +103,11 @@ String get_file_name(const String& path);
  *
  * @return     The parent path.
  */
-String get_parent_path(const String& path);
+NX_API String get_parent_path(const String& path);
 
-String join_path(const String& dir, const String& path);
+NX_API String join_path(const String& dir, const String& path);
 
-char get_path_separator();
+NX_API char get_path_separator();
 
-ReadAllResult read_file(const String& path);
+NX_API ReadAllResult read_file(const String& path);
 }

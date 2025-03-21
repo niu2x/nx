@@ -5,13 +5,26 @@ project ( NX VERSION "0.1.4" LANGUAGES CXX C )
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/cmake)
 include(warning_as_error)
 include(CMakePackageConfigHelpers)
-# include(library)
+include(GenerateExportHeader)
 
 set(LIB_NAME nx)
-add_library(${LIB_NAME} STATIC "")
 
 option(NX_STRICT "strict mode" OFF)
 option(NX_BUILD_TEST "build test" OFF)
+option(NX_STATIC "build static library" OFF)
+
+if(NX_STATIC)
+    add_library(${LIB_NAME} STATIC "")
+    target_compile_definitions(${LIB_NAME} PUBLIC NX_STATIC_DEFINE)
+else()
+    add_library(${LIB_NAME} SHARED "")
+    target_compile_definitions(${LIB_NAME} PRIVATE nx_EXPORTS)
+endif()
+
+generate_export_header(${LIB_NAME}
+    EXPORT_MACRO_NAME NX_API
+    EXPORT_FILE_NAME include/nx/api.h
+)
 
 if(NX_STRICT)
     warning_as_error_enable(${LIB_NAME})
@@ -42,6 +55,7 @@ target_link_directories(${LIB_NAME} PUBLIC
 # 
 install(TARGETS ${LIB_NAME} EXPORT ${LIB_NAME}-targets DESTINATION lib/niu2x)
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/nx DESTINATION include)
+install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/include/nx DESTINATION include)
 install(EXPORT ${LIB_NAME}-targets
     FILE ${LIB_NAME}-targets.cmake
     DESTINATION lib/cmake/niu2x/

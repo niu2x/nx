@@ -19,6 +19,7 @@
 #include <stdexcept>
 #include <variant>
 #include <chrono>
+#include <nx/api.h>
 
 #if defined(WIN32)
     #define NX_PLATFORM_WINDOW
@@ -133,7 +134,7 @@ public:
  *
  * @return     success?
  */
-bool pipe(Read& reader, Write& writer);
+NX_API bool pipe(Read& reader, Write& writer);
 
 class MemoryFile : public Read, private Uncopyable {
 public:
