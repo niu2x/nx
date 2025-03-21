@@ -54,7 +54,7 @@ using SharedPtr = std::shared_ptr<T>;
 /**
  * @brief      用于被private继承, 子类将不可被Copy
  */
-class Uncopyable {
+class NX_API Uncopyable {
 public:
     Uncopyable() = default;
     ~Uncopyable() = default;
@@ -67,7 +67,7 @@ public:
 };
 
 
-void panic_fmt(const char* fmt, ...);
+NX_API void panic_fmt(const char* fmt, ...);
 
 constexpr size_t operator""_kb(unsigned long long int n) { return n * 1024; }
 
@@ -106,7 +106,7 @@ enum class IO_Error {
 using ReadResult = Variant<IO_Error, EndOfFile, IO_Success>;
 using ReadAllResult = Variant<IO_Error, ByteBuffer>;
 
-class Read {
+class NX_API Read {
 public:
     virtual ~Read() = 0;
     virtual ReadResult read(void* buffer, size_t bytes) = 0;
@@ -119,7 +119,7 @@ public:
  */
 using WriteResult = Variant<IO_Error, IO_Success>;
 
-class Write {
+class NX_API Write {
 public:
     virtual ~Write() = 0;
     virtual WriteResult write(const void* buffer, size_t bytes) = 0;
