@@ -18,7 +18,7 @@ namespace nx::digest {
  *                 md5.finish(digest);
  *
  */
-class MD5 {
+class NX_API MD5 {
 public:
     MD5();
 
@@ -60,7 +60,7 @@ private:
 };
 
 /**
- * @brief      This class describes crc 32 algorithm.
+ * @brief      This class NX_API describes crc 32 algorithm.
  *             ### Example
  *
  *                 uint8_t digest[16];
@@ -70,7 +70,7 @@ private:
  *                 uint32_t checksum = crc32.get_value();
  *
  */
-class CRC32 {
+class NX_API CRC32 {
 public:
     CRC32();
 
@@ -94,7 +94,7 @@ private:
     uint32_t initial_;
 };
 
-class SHA256 {
+class NX_API SHA256 {
 public:
     SHA256();
 
@@ -135,13 +135,13 @@ private:
     // void sha256(const void *data, size_t len, uint8_t *hash);
 };
 
-String md5(const uint8_t *data, size_t len);
-String md5(const char *data);
+NX_API String md5(const uint8_t* data, size_t len);
+NX_API String md5(const char* data);
 
-String sha256(const uint8_t* data, size_t len);
-String sha256(const char* data);
+NX_API String sha256(const uint8_t* data, size_t len);
+NX_API String sha256(const char* data);
 
-uint32_t crc32(const uint8_t* data, size_t len);
-uint32_t crc32(const char* data);
+NX_API uint32_t crc32(const uint8_t* data, size_t len);
+NX_API uint32_t crc32(const char* data);
 
 } // namespace nx::digest

@@ -19,6 +19,7 @@
 #include <stdexcept>
 #include <variant>
 #include <chrono>
+#include <nx/api.h>
 
 #if defined(WIN32)
     #define NX_PLATFORM_WINDOW
@@ -53,7 +54,7 @@ using SharedPtr = std::shared_ptr<T>;
 /**
  * @brief      用于被private继承, 子类将不可被Copy
  */
-class Uncopyable {
+class NX_API Uncopyable {
 public:
     Uncopyable() = default;
     ~Uncopyable() = default;
@@ -66,7 +67,7 @@ public:
 };
 
 
-void panic_fmt(const char* fmt, ...);
+NX_API void panic_fmt(const char* fmt, ...);
 
 constexpr size_t operator""_kb(unsigned long long int n) { return n * 1024; }
 
@@ -105,7 +106,7 @@ enum class IO_Error {
 using ReadResult = Variant<IO_Error, EndOfFile, IO_Success>;
 using ReadAllResult = Variant<IO_Error, ByteBuffer>;
 
-class Read {
+class NX_API Read {
 public:
     virtual ~Read() = 0;
     virtual ReadResult read(void* buffer, size_t bytes) = 0;
@@ -118,7 +119,7 @@ public:
  */
 using WriteResult = Variant<IO_Error, IO_Success>;
 
-class Write {
+class NX_API Write {
 public:
     virtual ~Write() = 0;
     virtual WriteResult write(const void* buffer, size_t bytes) = 0;
@@ -133,9 +134,9 @@ public:
  *
  * @return     success?
  */
-bool pipe(Read& reader, Write& writer);
+NX_API bool pipe(Read& reader, Write& writer);
 
-class MemoryFile : public Read, private Uncopyable {
+class NX_API MemoryFile : public Read, private Uncopyable {
 public:
     MemoryFile(const uint8_t* buffer, size_t buf_len);
     ReadResult read(void* buffer, size_t bytes) override;
@@ -220,8 +221,8 @@ template<class T>
 inline bool is_pow2(T x) { return ((x - 1) & x) == 0; }
 
 using PrintLike = void (*)(const char* fmt, ...);
-void set_error_log(PrintLike fn);
-void set_no_error_log();
+NX_API void set_error_log(PrintLike fn);
+NX_API void set_no_error_log();
 
 } // namespace nx
 
