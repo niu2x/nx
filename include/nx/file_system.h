@@ -36,7 +36,7 @@ NX_API bool exists(const String& path);
 
 NX_API bool make_dirs(const String& path);
 
-class File : public Read, public Write, private Uncopyable {
+class NX_API File : public Read, public Write, private Uncopyable {
 public:
     explicit File(const String& p);
 
