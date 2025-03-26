@@ -129,7 +129,7 @@ if(NX_BUILD_LIBZIP AND NX_BUILD_ZLIB)
 
         add_subdirectory(libzip)
         target_compile_definitions(${LIB_NAME} PRIVATE USE_LIBZIP)
-        # target_link_libraries(${LIB_NAME} PRIVATE libzipstatic)
+        target_link_libraries(${LIB_NAME} PRIVATE libzip::zip)
     endfunction()
     configure_libzip()
 endif()

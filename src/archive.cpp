@@ -1,5 +1,6 @@
 #include <nx/file_system.h>
 #include "url-parser/url.hpp"
+#include <zip.h>
 
 namespace nx::file_system {
 // DirArchive
@@ -32,6 +33,47 @@ private:
     String root_dir_;
 };
 
+class ZipArchive : public Archive {
+public:
+    ZipArchive(const String& zip_path) : zip_path_(zip_path), zip_file_(nullptr)
+    {
+        int error = 0;
+        zip_file_ = zip_open(
+            zip_path_.c_str(), ZIP_CHECKCONS | ZIP_RDONLY, &error);
+        init_entries();
+    }
+    ~ZipArchive()
+    {
+        if (zip_file_) {
+            zip_close(zip_file_);
+        }
+    }
+
+    Vector<String> list_dir(const String& path) override
+    {
+        if (!zip_file_)
+            return {};
+        return {};
+    }
+    UniquePtr<Read> open(const String& path) override
+    {
+        if (!zip_file_)
+            return nullptr;
+        return nullptr;
+    }
+
+private:
+    String zip_path_;
+    zip_t* zip_file_;
+
+    void init_entries()
+    {
+        if (!zip_file_)
+            return;
+        zip_get_num_entries(zip_file_, 0);
+    }
+};
+
 } // namespace nx::file_system
 
 namespace nx::file_system {
@@ -47,8 +89,8 @@ UniquePtr<Archive> create_archive(const String& file_uri)
         if (scheme == "dir") {
             return std::make_unique<DirArchive>(path);
         } else if (scheme == "zip") {
-#if defined(USE_ZLIB)
-            return nullptr;
+#if defined(USE_LIBZIP)
+            return std::make_unique<ZipArchive>(path);
 #else
             return nullptr;
 #endif
