@@ -2,18 +2,10 @@
 
 int main()
 {
-    auto& in = nx::fs::in();
-    auto& output = nx::fs::out();
-    nx::pipe(in, output);
-
-    printf("ceil_pow2(5) == %d\n", nx::ceil_pow2(5u));
-    printf("ceil_pow2(15) == %d\n", nx::ceil_pow2(15u));
-    printf("ceil_pow2(16) == %d\n", nx::ceil_pow2(16u));
-    printf("ceil_pow2(17) == %d\n", nx::ceil_pow2(17u));
-
-    // nx::fs::make_dirs("xx");
-    bool x = nx::fs::make_dirs("xxdd/f1/22/32/x/");
-    printf("x: %d\n", x);
-
+    auto archive = nx::fs::create_archive("dir:///home/niu2x");
+    auto items = archive->list_dir("xx");
+    for (auto& x : items) {
+        printf("%s\n", x.c_str());
+    }
     return 0;
 }

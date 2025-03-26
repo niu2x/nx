@@ -36,6 +36,10 @@ NX_API bool exists(const String& path);
 
 NX_API bool make_dirs(const String& path);
 
+NX_API String relative_path(const String& path, const String& base);
+
+NX_API Vector<String> list_dir(const String& path);
+
 class NX_API File : public Read, public Write, private Uncopyable {
 public:
     explicit File(const String& p);
@@ -110,4 +114,13 @@ NX_API String join_path(const String& dir, const String& path);
 NX_API char get_path_separator();
 
 NX_API ReadAllResult read_file(const String& path);
+
+class NX_API Archive {
+public:
+    virtual ~Archive() = 0;
+    virtual Vector<String> list_dir(const String& path) = 0;
+    virtual UniquePtr<Read> open(const String& path) = 0;
+};
+
+NX_API UniquePtr<Archive> create_archive(const String& file_uri);
 }

@@ -31,3 +31,19 @@ TEST(digest, sha256)
 }
 
 TEST(digest, crc32) { EXPECT_EQ(nx::crc32("hello, world"), 0xffab723a); }
+
+TEST(file_system, archive)
+{
+    {
+        auto archive = nx::fs::create_archive("invalid:///path");
+        EXPECT_EQ(archive, nullptr);
+    }
+
+    {
+        auto archive = nx::fs::create_archive("dir:///");
+        EXPECT_TRUE(archive != nullptr);
+        EXPECT_TRUE(archive->list_dir("__invalid__").size() == 0);
+        EXPECT_TRUE(archive->list_dir(".").size() > 0);
+        EXPECT_TRUE(archive->open("./dev/null") != nullptr);
+    }
+}
