@@ -251,4 +251,24 @@ ReadAllResult read_file(const String& path)
     return file.read_all();
 }
 
+Vector<String> list_dir(const String& path)
+{
+    Vector<String> result;
+    if (!exists(path) || !is_directory(path)) {
+        return result;
+    }
+    try {
+        for (const auto& entry : std::filesystem::directory_iterator(path)) {
+            result.push_back(entry.path());
+        }
+    } catch (...) {
+    }
+    return result;
+}
+
+String relative_path(const String& path, const String& base)
+{
+    return std::filesystem::relative(path, base);
+}
+
 } // namespace nx::file_system
