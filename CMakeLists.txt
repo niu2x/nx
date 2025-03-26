@@ -14,7 +14,7 @@ option(NX_STRICT "strict mode" OFF)
 option(NX_BUILD_TEST "build test" OFF)
 option(NX_BUILD_ZLIB "build zlib" OFF)
 option(NX_BUILD_LIBZIP "build libzip" OFF)
-option(NX_STATIC "build static library" OFF)
+option(NX_STATIC "build static library" ON)
 
 if(NX_STATIC)
     add_library(${LIB_NAME} STATIC "")
@@ -88,52 +88,21 @@ target_link_directories(${LIB_NAME} PUBLIC
 # endif()
 
 
+# <Package>_INCLUDE_DIRS
+# <Package>_LIBRARIES:
+# <Package>_LIBRARY_DIRS:
+# <Package>_DEFINITIONS:
 
 if(NX_BUILD_ZLIB)
-    function(configure_zlib)
-        message(STATUS "build zlib")
-        set(SKIP_INSTALL_ALL ON)
-        add_subdirectory(zlib)
-        target_compile_definitions(${LIB_NAME} PRIVATE USE_ZLIB)
-        target_link_libraries(${LIB_NAME} PRIVATE zlibstatic)
-    endfunction()
-    configure_zlib()
+    find_package(ZLIB REQUIRED)
+    target_compile_definitions(${LIB_NAME} PRIVATE USE_ZLIB)
+    target_link_libraries(${LIB_NAME} PUBLIC ${ZLIB_LIBRARIES})
+    target_include_directories(${LIB_NAME} PUBLIC ${ZLIB_INCLUDE_DIRS})
+    target_link_libraries(${LIB_NAME} PUBLIC ${ZLIB_LIBRARIES})
 endif()
 
 if(NX_BUILD_LIBZIP AND NX_BUILD_ZLIB)
-    message(STATUS "build libzip")
-    
-    # FetchContent_Declare(
-    #     zlib
-    #     GIT_REPOSITORY https://github.com/madler/zlib.git
-    #     GIT_TAG v1.3.1
-    # )
-    # FetchContent_MakeAvailable(zlib)
-    # target_compile_definitions(${LIB_NAME} PRIVATE USE_ZLIB)
-    function(configure_libzip)
-        message(STATUS "build libzip")
-        option(BUILD_SHARED_LIBS "" OFF)
-        option(BUILD_DOC "" OFF)
-        option(BUILD_EXAMPLES "" OFF)
-        option(BUILD_OSSFUZZ "" OFF)
-        option(BUILD_REGRESS "" OFF)
-        option(BUILD_TOOLS "" OFF)
-        option(ENABLE_FDOPEN "" OFF)
-        option(ENABLE_ZSTD "" OFF)
-        option(ENABLE_LZMA "" OFF)
-        option(ENABLE_BZIP2 "" OFF)
-        option(ENABLE_WINDOWS_CRYPTO "" OFF)
-        option(ENABLE_OPENSSL "" OFF)
-        option(ENABLE_MBEDTLS "" OFF)
-        option(ENABLE_COMMONCRYPTO "" OFF)
-        option(ENABLE_GNUTLS "" OFF)
-        option(LIBZIP_DO_INSTALL "" OFF)
-
-        add_subdirectory(libzip)
-        target_compile_definitions(${LIB_NAME} PRIVATE USE_LIBZIP)
-        target_link_libraries(${LIB_NAME} PRIVATE zip)
-    endfunction()
-    configure_libzip()
+    find_package(libzip REQUIRED)
 endif()
 
 
