@@ -101,8 +101,10 @@ if(NX_BUILD_ZLIB)
     target_link_libraries(${LIB_NAME} PUBLIC ${ZLIB_LIBRARIES})
 endif()
 
-if(NX_BUILD_LIBZIP AND NX_BUILD_ZLIB)
+if(NX_BUILD_LIBZIP)
     find_package(libzip REQUIRED)
+    target_link_libraries(${LIB_NAME} PUBLIC libzip::zip)
+    target_compile_definitions(${LIB_NAME} PRIVATE USE_LIBZIP)
 endif()
 
 
