@@ -46,6 +46,12 @@ UniquePtr<Archive> create_archive(const String& file_uri)
         auto path = u1.path();
         if (scheme == "dir") {
             return std::make_unique<DirArchive>(path);
+        } else if (scheme == "zip") {
+#if defined(USE_ZLIB)
+            return nullptr;
+#else
+            return nullptr;
+#endif
         } else {
             return nullptr;
         }

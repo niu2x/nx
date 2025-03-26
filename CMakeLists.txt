@@ -6,12 +6,14 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/cmake)
 include(warning_as_error)
 include(CMakePackageConfigHelpers)
 include(GenerateExportHeader)
+include(FetchContent)
 
 set(LIB_NAME nx)
 
 option(NX_STRICT "strict mode" OFF)
 option(NX_BUILD_TEST "build test" OFF)
-option(NX_STATIC "build static library" OFF)
+option(NX_BUILD_ZLIB "build zlib" ON)
+# option(NX_STATIC "build static library" OFF)
 
 if(NX_STATIC)
     add_library(${LIB_NAME} STATIC "")
@@ -81,11 +83,21 @@ install(FILES
     DESTINATION lib/cmake/niu2x
 )
 
+if(NX_BUILD_ZLIB)
+    message(STATUS "build zlib")
+    
+    FetchContent_Declare(
+        zlib
+        GIT_REPOSITORY https://github.com/madler/zlib.git
+        GIT_TAG v1.3.1
+    )
+    FetchContent_MakeAvailable(zlib)
+    target_compile_definitions(${LIB_NAME} PRIVATE USE_ZLIB)
+endif()
 
 if(NX_BUILD_TEST)
     message(STATUS "build test")
     include(CTest)
-    include(FetchContent)
     FetchContent_Declare(
         googletest
         URL https://github.com/google/googletest/archive/refs/tags/release-1.12.1.zip
@@ -98,8 +110,7 @@ if(NX_BUILD_TEST)
     set_target_properties(unittest PROPERTIES 
         CXX_STANDARD 17
     )
-
-
     add_test(NAME UnitTest COMMAND unittest)
 
 endif()
+
