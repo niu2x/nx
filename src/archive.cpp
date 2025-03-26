@@ -165,18 +165,9 @@ public:
 
         NX_ASSERT(path.size() > 0 && path[0] == '/',
                   "list_dir expect path start with '/'");
-
-        // if(path == "."){
-        //     return vfs_.list_dir("/");
-        // }
-        // else if (path.substr(0, 2) == "./") {
-        //     return vfs_.list_dir(path.substr(1));
-        // } else if (path.size() > 0 && path[0] == '/') {
         return vfs_.list_dir(path);
-        // } else {
-        //     return vfs_.list_dir("/" + path);
-        // }
     }
+
     UniquePtr<Read> open(const String& path) override
     {
         (void)path;
@@ -190,7 +181,6 @@ private:
     zip_t* zip_file_;
 
     bool entries_inited_;
-    // Vector<String> entries_;
 
     void init_entries()
     {
@@ -207,7 +197,6 @@ private:
                 }
             }
         }
-        // std::sort(entries_.begin(), entries_.end());
     }
 
     VFS vfs_;
