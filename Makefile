@@ -5,14 +5,17 @@ EMSDK := /opt/emsdk/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake
 build-wasm:
 	cmake -S. -Bbuild/nx/wasm -DNX_STRICT=ON -DNX_BUILD_TEST=OFF -DNX_STATIC=ON -DCMAKE_TOOLCHAIN_FILE=$(EMSDK)
 	cmake --build build/nx/wasm
+	git submodule foreach --recursive git reset --hard
 
 build-nx-static:
 	cmake -S. -Bbuild/nx/static -DNX_STRICT=ON -DNX_BUILD_TEST=ON -DNX_STATIC=ON;
 	cmake --build build/nx/static;
+	git submodule foreach --recursive git reset --hard
 
 build-nx-shared:
 	cmake -S. -Bbuild/nx/shared -DNX_STRICT=ON -DNX_BUILD_TEST=ON -DNX_STATIC=OFF;
 	cmake --build build/nx/shared;
+	git submodule foreach --recursive git reset --hard
 
 # install-nx-static: build-nx-static
 # 	cmake --install build/nx/static --prefix dist/static
