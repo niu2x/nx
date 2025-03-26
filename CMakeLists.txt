@@ -13,7 +13,8 @@ set(LIB_NAME nx)
 option(NX_STRICT "strict mode" OFF)
 option(NX_BUILD_TEST "build test" OFF)
 option(NX_BUILD_ZLIB "build zlib" ON)
-# option(NX_STATIC "build static library" OFF)
+option(NX_BUILD_LIBZIP "build libzip" ON)
+option(NX_STATIC "build static library" OFF)
 
 if(NX_STATIC)
     add_library(${LIB_NAME} STATIC "")
@@ -55,45 +56,62 @@ target_link_directories(${LIB_NAME} PUBLIC
 )
 
 # 
-install(TARGETS ${LIB_NAME} EXPORT ${LIB_NAME}-targets DESTINATION lib/niu2x)
-install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/nx DESTINATION include)
-install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/include/nx DESTINATION include)
-install(EXPORT ${LIB_NAME}-targets
-    FILE ${LIB_NAME}-targets.cmake
-    DESTINATION lib/cmake/niu2x/
-    # NAMESPACE niu2x::
-)
 
-configure_package_config_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake_install_config.in
-    "${CMAKE_CURRENT_BINARY_DIR}/${LIB_NAME}-config.cmake"
-    INSTALL_DESTINATION "lib/cmake/niu2x"
-    NO_SET_AND_CHECK_MACRO
-    NO_CHECK_REQUIRED_COMPONENTS_MACRO
-)
+if(NOT NX_STATIC)
+    install(TARGETS ${LIB_NAME} EXPORT ${LIB_NAME}-targets DESTINATION lib/niu2x)
+    install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/nx DESTINATION include)
+    install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/include/nx DESTINATION include)
+    install(EXPORT ${LIB_NAME}-targets
+        FILE ${LIB_NAME}-targets.cmake
+        DESTINATION lib/cmake/niu2x/
+        # NAMESPACE niu2x::
+    )
 
-write_basic_package_version_file(
-    "${CMAKE_CURRENT_BINARY_DIR}/${LIB_NAME}-config-version.cmake"
-    VERSION "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}"
-    COMPATIBILITY AnyNewerVersion
-)
+    configure_package_config_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake_install_config.in
+        "${CMAKE_CURRENT_BINARY_DIR}/${LIB_NAME}-config.cmake"
+        INSTALL_DESTINATION "lib/cmake/niu2x"
+        NO_SET_AND_CHECK_MACRO
+        NO_CHECK_REQUIRED_COMPONENTS_MACRO
+    )
 
-install(FILES
-    ${CMAKE_CURRENT_BINARY_DIR}/${LIB_NAME}-config.cmake
-    ${CMAKE_CURRENT_BINARY_DIR}/${LIB_NAME}-config-version.cmake
-    DESTINATION lib/cmake/niu2x
-)
+    write_basic_package_version_file(
+        "${CMAKE_CURRENT_BINARY_DIR}/${LIB_NAME}-config-version.cmake"
+        VERSION "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}"
+        COMPATIBILITY AnyNewerVersion
+    )
+
+    install(FILES
+        ${CMAKE_CURRENT_BINARY_DIR}/${LIB_NAME}-config.cmake
+        ${CMAKE_CURRENT_BINARY_DIR}/${LIB_NAME}-config-version.cmake
+        DESTINATION lib/cmake/niu2x
+    )
+endif()
+
+
 
 if(NX_BUILD_ZLIB)
-    message(STATUS "build zlib")
-    
-    FetchContent_Declare(
-        zlib
-        GIT_REPOSITORY https://github.com/madler/zlib.git
-        GIT_TAG v1.3.1
-    )
-    FetchContent_MakeAvailable(zlib)
-    target_compile_definitions(${LIB_NAME} PRIVATE USE_ZLIB)
+    function(configure_zlib)
+        message(STATUS "build zlib")
+        set(SKIP_INSTALL_ALL ON)
+        add_subdirectory(zlib)
+        target_compile_definitions(${LIB_NAME} PRIVATE USE_ZLIB)
+        target_link_libraries(${LIB_NAME} PRIVATE zlibstatic)
+    endfunction()
+    configure_zlib()
 endif()
+
+if(NX_BUILD_LIBZIP AND NX_BUILD_ZLIB)
+    message(STATUS "build libzip")
+    
+    # FetchContent_Declare(
+    #     zlib
+    #     GIT_REPOSITORY https://github.com/madler/zlib.git
+    #     GIT_TAG v1.3.1
+    # )
+    # FetchContent_MakeAvailable(zlib)
+    # target_compile_definitions(${LIB_NAME} PRIVATE USE_ZLIB)
+endif()
+
 
 if(NX_BUILD_TEST)
     message(STATUS "build test")
