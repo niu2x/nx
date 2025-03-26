@@ -42,8 +42,8 @@ TEST(file_system, archive)
     {
         auto archive = nx::fs::create_archive("dir:///");
         EXPECT_TRUE(archive != nullptr);
-        EXPECT_TRUE(archive->list_dir("__invalid__").size() == 0);
-        EXPECT_TRUE(archive->list_dir(".").size() > 0);
-        EXPECT_TRUE(archive->open("./dev/null") != nullptr);
+        EXPECT_TRUE(archive->list_dir("/__invalid__").size() == 0);
+        EXPECT_TRUE(archive->list_dir("/").size() > 0);
+        EXPECT_TRUE(archive->open("/dev/null") != nullptr);
     }
 }

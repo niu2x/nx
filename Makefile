@@ -3,17 +3,17 @@ default: build-wasm test cmake-library-shared
 EMSDK := /opt/emsdk/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake
 
 build-wasm:
-	cmake -S. -Bbuild/nx/wasm -DNX_STRICT=ON -DNX_BUILD_TEST=OFF -DNX_STATIC=ON -DCMAKE_TOOLCHAIN_FILE=$(EMSDK)
+	cmake -S. -DCMAKE_BUILD_TYPE=Debug -Bbuild/nx/wasm -DNX_STRICT=ON -DNX_BUILD_TEST=OFF -DNX_STATIC=ON -DCMAKE_TOOLCHAIN_FILE=$(EMSDK)
 	cmake --build build/nx/wasm
 	git submodule foreach --recursive git reset --hard
 
 build-nx-static:
-	cmake -S. -Bbuild/nx/static -DNX_STRICT=ON -DNX_BUILD_TEST=ON -DNX_STATIC=ON;
+	cmake -S. -DCMAKE_BUILD_TYPE=Debug -Bbuild/nx/static -DNX_STRICT=ON -DNX_BUILD_TEST=ON -DNX_STATIC=ON;
 	cmake --build build/nx/static;
 	git submodule foreach --recursive git reset --hard
 
 build-nx-shared:
-	cmake -S. -Bbuild/nx/shared -DNX_STRICT=ON -DNX_BUILD_TEST=ON -DNX_STATIC=OFF;
+	cmake -S. -DCMAKE_BUILD_TYPE=Debug -Bbuild/nx/shared -DNX_STRICT=ON -DNX_BUILD_TEST=ON -DNX_STATIC=OFF;
 	cmake --build build/nx/shared;
 	git submodule foreach --recursive git reset --hard
 
@@ -28,11 +28,11 @@ test: build-nx-shared build-nx-static
 	cd build/nx/shared && ctest --output-on-failure
 
 # cmake-library-static: install-nx-static
-# 	nx_DIR=dist/static/lib/cmake/niu2x cmake -S tests/cmake-library -Bbuild/tests/cmake-library/static
+# 	nx_DIR=dist/static/lib/cmake/niu2x cmake -S tests/cmake-library -DCMAKE_BUILD_TYPE=Debug -Bbuild/tests/cmake-library/static
 # 	cmake --build build/tests/cmake-library/static
 
 cmake-library-shared: install-nx-shared
-	nx_DIR=dist/shared/lib/cmake/niu2x cmake -S tests/cmake-library -Bbuild/tests/cmake-library/shared
+	nx_DIR=dist/shared/lib/cmake/niu2x cmake -S tests/cmake-library -DCMAKE_BUILD_TYPE=Debug -Bbuild/tests/cmake-library/shared
 	cmake --build build/tests/cmake-library/shared
 
 # cmake-library: cmake-library-shared cmake-library-static
