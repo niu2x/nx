@@ -1,7 +1,10 @@
 #include <nx/file_system.h>
 #include "url-parser/url.hpp"
 #include "log.h"
-#include <zip.h>
+
+#if defined(USE_LIBZIP)
+    #include <zip.h>
+#endif
 
 namespace nx::file_system {
 
@@ -154,6 +157,8 @@ private:
     String root_dir_;
 };
 
+#if defined(USE_LIBZIP)
+
 class ZipEntry : public Read {
 public:
     ZipEntry(zip_file_t* entry) : entry_(entry) { }
@@ -242,6 +247,8 @@ private:
 
     VFS<zip_uint64_t> vfs_;
 };
+
+#endif
 
 } // namespace nx::file_system
 

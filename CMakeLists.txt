@@ -12,8 +12,8 @@ set(LIB_NAME nx)
 
 option(NX_STRICT "strict mode" OFF)
 option(NX_BUILD_TEST "build test" OFF)
-option(NX_BUILD_ZLIB "build zlib" ON)
-option(NX_BUILD_LIBZIP "build libzip" ON)
+option(NX_BUILD_ZLIB "build zlib" OFF)
+option(NX_BUILD_LIBZIP "build libzip" OFF)
 option(NX_STATIC "build static library" OFF)
 
 if(NX_STATIC)
@@ -57,7 +57,7 @@ target_link_directories(${LIB_NAME} PUBLIC
 
 # 
 
-if(NOT NX_STATIC)
+# if(NOT NX_STATIC)
     install(TARGETS ${LIB_NAME} EXPORT ${LIB_NAME}-targets DESTINATION lib/niu2x)
     install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/nx DESTINATION include)
     install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/include/nx DESTINATION include)
@@ -85,7 +85,7 @@ if(NOT NX_STATIC)
         ${CMAKE_CURRENT_BINARY_DIR}/${LIB_NAME}-config-version.cmake
         DESTINATION lib/cmake/niu2x
     )
-endif()
+# endif()
 
 
 

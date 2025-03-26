@@ -17,8 +17,8 @@ build-nx-shared:
 	cmake --build build/nx/shared;
 	git submodule foreach --recursive git reset --hard
 
-# install-nx-static: build-nx-static
-# 	cmake --install build/nx/static --prefix dist/static
+install-nx-static: build-nx-static
+	cmake --install build/nx/static --prefix dist/static
 
 install-nx-shared: build-nx-shared
 	cmake --install build/nx/shared --prefix dist/shared
@@ -27,15 +27,15 @@ test: build-nx-shared build-nx-static
 	cd build/nx/static && ctest --output-on-failure
 	cd build/nx/shared && ctest --output-on-failure
 
-# cmake-library-static: install-nx-static
-# 	nx_DIR=dist/static/lib/cmake/niu2x cmake -S tests/cmake-library -DCMAKE_BUILD_TYPE=Debug -Bbuild/tests/cmake-library/static
-# 	cmake --build build/tests/cmake-library/static
+cmake-library-static: install-nx-static
+	nx_DIR=dist/static/lib/cmake/niu2x cmake -S tests/cmake-library -DCMAKE_BUILD_TYPE=Debug -Bbuild/tests/cmake-library/static
+	cmake --build build/tests/cmake-library/static
 
 cmake-library-shared: install-nx-shared
 	nx_DIR=dist/shared/lib/cmake/niu2x cmake -S tests/cmake-library -DCMAKE_BUILD_TYPE=Debug -Bbuild/tests/cmake-library/shared
 	cmake --build build/tests/cmake-library/shared
 
-# cmake-library: cmake-library-shared cmake-library-static
+cmake-library: cmake-library-shared cmake-library-static
 
 update-version:
 	change-version -i -v $(ver) CMake ./CMakeLists.txt
