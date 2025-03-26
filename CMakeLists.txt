@@ -140,6 +140,8 @@ endif()
 if(NX_BUILD_TEST)
     message(STATUS "build test")
     include(CTest)
+
+    set(INSTALL_GTEST OFF)
     FetchContent_Declare(
         googletest
         URL https://github.com/google/googletest/archive/refs/tags/release-1.12.1.zip
