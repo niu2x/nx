@@ -7,11 +7,11 @@ build-wasm:
 	cmake --build build/nx/wasm
 
 build-nx-static:
-	cmake -S. -DCMAKE_BUILD_TYPE=Debug -Bbuild/nx/static -DNX_STRICT=ON -DNX_BUILD_TEST=ON -DNX_STATIC=ON;
+	cmake -S. -DCMAKE_BUILD_TYPE=Debug -Bbuild/nx/static -DNX_STRICT=ON -DNX_BUILD_TEST=ON -DNX_STATIC=ON -DNX_BUILD_ZLIB=ON;
 	cmake --build build/nx/static;
 
 build-nx-shared:
-	cmake -S. -DCMAKE_BUILD_TYPE=Debug -Bbuild/nx/shared -DNX_STRICT=ON -DNX_BUILD_TEST=ON -DNX_STATIC=OFF;
+	cmake -S. -DCMAKE_BUILD_TYPE=Debug -Bbuild/nx/shared -DNX_STRICT=ON -DNX_BUILD_TEST=ON -DNX_STATIC=OFF -DNX_BUILD_ZLIB=ON;
 	cmake --build build/nx/shared;
 
 install-nx-static: build-nx-static

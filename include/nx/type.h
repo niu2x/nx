@@ -225,6 +225,9 @@ using PrintLike = void (*)(const char* fmt, ...);
 NX_API void set_error_log(PrintLike fn);
 NX_API void set_no_error_log();
 
+NX_API ByteBuffer zlib_compress(const uint8_t* buf, size_t len);
+NX_API ByteBuffer zlib_uncompress(const uint8_t* buf, size_t len);
+
 } // namespace nx
 
 /**
