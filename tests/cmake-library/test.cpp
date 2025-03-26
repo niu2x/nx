@@ -3,12 +3,10 @@
 int main()
 {
     auto archive = nx::fs::create_archive(
-        "zip:///home/niu2x/project/ant/3rd/Effekseer/docs/QuickTutorial_Tool/"
-        "01_AndrewFM%20Tutorial.zip");
-    printf("archive %p\n", archive.get());
-    auto items = archive->list_dir("/01_AndrewFM Tutorial");
-    for (auto& x : items) {
-        printf("%s\n", x.c_str());
-    }
+        "zip:///home/niu2x/project/llvm-project/lldb/unittests/Host/common/"
+        "Inputs/zip-test.zip");
+    auto file = archive->open("/lib/arm64-v8a/libzip-test.so");
+    nx::pipe(*file, nx::fs::out());
+
     return 0;
 }

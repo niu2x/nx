@@ -5,20 +5,25 @@
 
 namespace nx::file_system {
 
+template <class Data>
 struct FileNode {
     String name;
     Vector<UniquePtr<FileNode>> children;
+    Data data;
 };
 
+template <class Data>
 class VFS {
 public:
+    using FileNodeType = FileNode<Data>;
     VFS() { }
     ~VFS() { }
-    void add_file(const String& p)
+    void add_file(const String& path)
     {
-        if (p.size() > 0 && p[0] == '/') {
-            add_file(&root_, &p[1]);
-        }
+        NX_ASSERT(path.size() > 0 && path[0] == '/',
+                  "add_file expect path start with '/'");
+
+        add_file(&root_, &path[1]);
     }
 
     Vector<String> list_dir(const String& path) const
@@ -27,7 +32,7 @@ public:
                   "list_dir expect path start with '/'");
 
         Vector<String> result;
-        const FileNode* node = find_node(&root_, &path[1]);
+        const FileNodeType* node = find_node(&root_, &path[1]);
         if (node) {
             std::transform(node->children.begin(),
                            node->children.end(),
@@ -37,10 +42,17 @@ public:
         return result;
     }
 
-private:
-    FileNode root_;
+    FileNodeType* find_node(const String& path)
+    {
+        NX_ASSERT(path.size() > 0 && path[0] == '/',
+                  "find_node expect path start with '/'");
+        return const_cast<FileNodeType*>(find_node(&root_, &path[1]));
+    }
 
-    void add_file(FileNode* file_node, const char* path)
+private:
+    FileNodeType root_;
+
+    void add_file(FileNodeType* file_node, const char* path)
     {
         const char* sep = strchr(path, '/');
         int name_len = 0;
@@ -63,7 +75,7 @@ private:
             }
         }
 
-        auto new_node = std::make_unique<FileNode>();
+        auto new_node = std::make_unique<FileNodeType>();
         new_node->name = std::move(name);
 
         if (sep) {
@@ -72,7 +84,8 @@ private:
         file_node->children.push_back(std::move(new_node));
     }
 
-    const FileNode* find_node(const FileNode* file_node, const char* path) const
+    const FileNodeType* find_node(const FileNodeType* file_node,
+                                  const char* path) const
     {
         const char* sep = strchr(path, '/');
         int name_len = 0;
@@ -127,6 +140,9 @@ public:
     }
     UniquePtr<Read> open(const String& path) override
     {
+        NX_ASSERT(path.size() > 0 && path[0] == '/',
+                  "open expect path start with '/'");
+
         auto file_path = join_path(root_dir_, path);
         auto file = std::make_unique<File>(file_path);
         if (file->open_read())
@@ -138,16 +154,37 @@ private:
     String root_dir_;
 };
 
+class ZipEntry : public Read {
+public:
+    ZipEntry(zip_file_t* entry) : entry_(entry) { }
+
+    ~ZipEntry() { zip_fclose(entry_); }
+
+    ReadResult read(void* buffer, size_t bytes)
+    {
+        auto result = zip_fread(entry_, buffer, bytes);
+
+        if (result == 0)
+            return EndOfFile {};
+
+        if (result == -1)
+            return IO_Error::IO_FAIL;
+
+        return IO_Success { .bytes = (size_t)result };
+    }
+
+private:
+    zip_file_t* entry_;
+};
+
 class ZipArchive : public Archive {
 public:
-    ZipArchive(const String& zip_path)
-    : zip_path_(zip_path)
-    , zip_file_(nullptr)
-    , entries_inited_(false)
+    ZipArchive(const String& zip_path) : zip_path_(zip_path), zip_file_(nullptr)
     {
         int error = 0;
         zip_file_ = zip_open(
             zip_path_.c_str(), ZIP_CHECKCONS | ZIP_RDONLY, &error);
+        init_entries();
     }
     ~ZipArchive()
     {
@@ -158,10 +195,6 @@ public:
 
     Vector<String> list_dir(const String& path) override
     {
-        if (!entries_inited_) {
-            entries_inited_ = true;
-            init_entries();
-        }
 
         NX_ASSERT(path.size() > 0 && path[0] == '/',
                   "list_dir expect path start with '/'");
@@ -170,17 +203,24 @@ public:
 
     UniquePtr<Read> open(const String& path) override
     {
-        (void)path;
-        if (!zip_file_)
+        NX_ASSERT(path.size() > 0 && path[0] == '/',
+                  "Archive::open expect path start with '/'");
+
+        auto node = vfs_.find_node(path);
+        if (!node)
             return nullptr;
-        return nullptr;
+
+        auto index = node->data;
+        zip_file_t* file = zip_fopen_index(zip_file_, index, 0);
+        if (!file)
+            return nullptr;
+
+        return std::make_unique<ZipEntry>(file);
     }
 
 private:
     String zip_path_;
     zip_t* zip_file_;
-
-    bool entries_inited_;
 
     void init_entries()
     {
@@ -192,14 +232,15 @@ private:
             String name = zip_get_name(zip_file_, num_entries, 0);
             if (name.size() > 0) {
                 if (name[name.size() - 1] != '/') {
-                    // entries_.emplace_back(name);
                     vfs_.add_file("/" + name);
+                    auto node = vfs_.find_node("/" + name);
+                    node->data = num_entries;
                 }
             }
         }
     }
 
-    VFS vfs_;
+    VFS<zip_uint64_t> vfs_;
 };
 
 } // namespace nx::file_system
@@ -213,7 +254,6 @@ UniquePtr<Archive> create_archive(const String& file_uri)
     try {
         Url u1(file_uri);
         auto scheme = u1.scheme();
-        printf("xx %s\n", scheme.c_str());
         auto path = u1.path();
         if (scheme == "dir") {
             return std::make_unique<DirArchive>(path);
