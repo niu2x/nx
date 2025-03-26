@@ -86,6 +86,8 @@ bool Write::write_all(const void* buffer, size_t bytes)
     return true;
 }
 
+bool pipe(Read* source, Write* sink) { return pipe(*source, *sink); }
+
 bool pipe(Read& source, Write& sink)
 {
     const auto buf_nr = 8_kb;

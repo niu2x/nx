@@ -135,6 +135,7 @@ public:
  * @return     success?
  */
 NX_API bool pipe(Read& reader, Write& writer);
+NX_API bool pipe(Read* reader, Write* writer);
 
 class NX_API MemoryFile : public Read, private Uncopyable {
 public:
