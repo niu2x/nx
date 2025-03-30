@@ -1,4 +1,10 @@
 @PACKAGE_INIT@
 
+set(NX_BUILD_LIBZIP @NX_BUILD_LIBZIP@)
+
+if(NX_BUILD_LIBZIP)
+    find_package(libzip REQUIRED)
+endif()
+
 include("${CMAKE_CURRENT_LIST_DIR}/nx-targets.cmake" )
 
