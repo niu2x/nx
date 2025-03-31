@@ -125,7 +125,7 @@ namespace nx::file_system {
 
 class DirArchive : public Archive {
 public:
-    DirArchive(const String& root_dir) : root_dir_(root_dir) { }
+    explicit DirArchive(const String& root_dir) : root_dir_(root_dir) { }
     ~DirArchive() { }
 
     Vector<String> list_dir(const String& path) override
@@ -161,7 +161,7 @@ private:
 
 class ZipEntry : public Read {
 public:
-    ZipEntry(zip_file_t* entry) : entry_(entry) { }
+    explicit ZipEntry(zip_file_t* entry) : entry_(entry) { }
 
     ~ZipEntry() { zip_fclose(entry_); }
 
@@ -184,7 +184,27 @@ private:
 
 class ZipArchive : public Archive {
 public:
-    ZipArchive(const String& zip_path) : zip_path_(zip_path), zip_file_(nullptr)
+    ZipArchive(const void* buf, size_t len) : zip_path_(""), zip_file_(nullptr)
+    {
+        zip_error_t error;
+        auto source = zip_source_buffer_create(buf, len, 0, &error);
+
+        if (source) {
+            zip_file_ = zip_open_from_source(
+                source, ZIP_CHECKCONS | ZIP_RDONLY, &error);
+            init_entries();
+
+            if (!zip_file_) {
+                zip_source_free(source);
+            }
+        } else {
+            zip_source_free(source);
+        }
+    }
+
+    explicit ZipArchive(const String& zip_path)
+    : zip_path_(zip_path)
+    , zip_file_(nullptr)
     {
         int error = 0;
         zip_file_ = zip_open(
@@ -277,6 +297,17 @@ UniquePtr<Archive> create_archive(const String& file_uri)
         error_log("url parse error: %s\n", file_uri.c_str());
         return nullptr;
     }
+}
+
+UniquePtr<Archive> create_zip_archive_from_memory(const void* buf, size_t len)
+{
+#if defined(USE_LIBZIP)
+    return std::make_unique<ZipArchive>(buf, len);
+#else
+    (void) buf;
+    (void) len;
+    return nullptr;
+#endif
 }
 
 } // namespace nx::file_system
