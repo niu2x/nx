@@ -2,6 +2,8 @@ target_sources(${LIB_NAME} PRIVATE
 	file_system.cpp
 	archive.cpp
 
+	compress.cpp
+
 	type.cpp
 
 	md5.cpp

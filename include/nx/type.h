@@ -135,6 +135,7 @@ public:
  * @return     success?
  */
 NX_API bool pipe(Read& reader, Write& writer);
+NX_API bool pipe(Read* reader, Write* writer);
 
 class NX_API MemoryFile : public Read, private Uncopyable {
 public:
@@ -223,6 +224,9 @@ inline bool is_pow2(T x) { return ((x - 1) & x) == 0; }
 using PrintLike = void (*)(const char* fmt, ...);
 NX_API void set_error_log(PrintLike fn);
 NX_API void set_no_error_log();
+
+NX_API ByteBuffer zlib_compress(const uint8_t* buf, size_t len);
+NX_API ByteBuffer zlib_uncompress(const uint8_t* buf, size_t len);
 
 } // namespace nx
 
