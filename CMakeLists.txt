@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.13.0 FATAL_ERROR)
 
-project ( NX VERSION 0.1.6 LANGUAGES CXX C )      
+project ( NX VERSION 0.1.7 LANGUAGES CXX C )       
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/cmake)
 include(warning_as_error)
@@ -128,4 +128,3 @@ if(NX_BUILD_TEST)
     add_test(NAME UnitTest COMMAND unittest)
 
 endif()
-
