@@ -7,11 +7,11 @@ build-wasm:
 	cmake --build build/nx/wasm
 
 build-nx-static:
-	cmake -S. -DCMAKE_BUILD_TYPE=Debug -Bbuild/nx/static -DNX_STRICT=ON -DNX_BUILD_TEST=ON -DNX_STATIC=ON -DNX_BUILD_ZLIB=ON -DNX_BUILD_LIBZIP=ON -Dlibzip_DIR=/home/niu2x/project/libzip/build/dist/lib/cmake/libzip;
+	cmake -S. -DCMAKE_BUILD_TYPE=Debug -Bbuild/nx/static -DNX_STRICT=ON -DNX_BUILD_TEST=ON -DNX_STATIC=ON -DNX_BUILD_ZLIB=OFF -DNX_BUILD_LIBZIP=OFF -Dlibzip_DIR=/home/niu2x/project/libzip/build/dist/lib/cmake/libzip;
 	cmake --build build/nx/static;
 
 build-nx-shared:
-	cmake -S. -DCMAKE_BUILD_TYPE=Debug -Bbuild/nx/shared -DNX_STRICT=ON -DNX_BUILD_TEST=ON -DNX_STATIC=OFF -DNX_BUILD_ZLIB=ON -DNX_BUILD_LIBZIP=ON -Dlibzip_DIR=/home/niu2x/project/libzip/build/dist/lib/cmake/libzip;
+	cmake -S. -DCMAKE_BUILD_TYPE=Debug -Bbuild/nx/shared -DNX_STRICT=ON -DNX_BUILD_TEST=ON -DNX_STATIC=OFF -DNX_BUILD_ZLIB=OFF -DNX_BUILD_LIBZIP=OFF -Dlibzip_DIR=/home/niu2x/project/libzip/build/dist/lib/cmake/libzip;
 	cmake --build build/nx/shared;
 
 install-nx-static: build-nx-static
