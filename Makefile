@@ -1,4 +1,4 @@
-default: build-wasm test cmake-library-shared
+default: build-wasm test cmake-library
 
 EMSDK := /opt/emsdk/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake
 

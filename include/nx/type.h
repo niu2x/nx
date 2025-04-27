@@ -176,6 +176,12 @@ inline TimeDuration time_diff(const TimePoint& t_old, const TimePoint& t_new)
     return std::chrono::duration_cast<std_ms>(t_new - t_old).count();
 }
 
+inline TimeDuration time_diff_epoch(const TimePoint& t)
+{
+    using std_ms = std::chrono::milliseconds;
+    return std::chrono::duration_cast<std_ms>(t.time_since_epoch()).count();
+}
+
 inline uint8_t ceil_pow2(uint8_t n)
 {
     n -= 1;

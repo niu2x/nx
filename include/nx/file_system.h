@@ -122,6 +122,8 @@ public:
     virtual UniquePtr<Read> open(const String& path) = 0;
 };
 
+// dir:///
+// zip:///
 NX_API UniquePtr<Archive> create_archive(const String& file_uri);
 NX_API UniquePtr<Archive> create_zip_archive_from_memory(const void* buf,
                                                          size_t len);
