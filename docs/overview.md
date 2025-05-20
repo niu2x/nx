@@ -10,8 +10,8 @@
 - [UniquePtr<T>](\ref nx::UniquePtr)
 - [Variant<T ...>](\ref nx::Variant)
 
-# basic helper class
-- [Uncopyable](\ref nx::Uncopyable)
+<!-- # basic helper class
+- [Uncopyable](\ref nx::Uncopyable) -->
 
 # basic interface
 - [Read](\ref nx::Read)
@@ -23,7 +23,7 @@
 - [time_now](\ref nx::time_now)
 - [time_diff](\ref nx::time_diff)
 
-### Examples,
+### Examples
 
 ```
 TimePoint before = time_now();
