@@ -248,10 +248,26 @@ NX_API ByteBuffer zlib_uncompress(const uint8_t* buf, size_t len);
         NX_PANIC(msg " file:%s line:%d", ##__VA_ARGS__, __FILE__, __LINE__);   \
     }
 
+/**
+ * @brief      get bit flag
+ *
+ * @param      x     the value
+ * @param      bit   The bit index
+ *
+ * @return     1 or 0
+ */
 #define NX_GET_BIT(x, bit)      (((x) >> (bit)) & 1)
 #define NX_SET_BIT(x, bit)      ((x) | (1 << (bit)))
 #define NX_CLEAR_BIT(x, bit)    ((x) & (~(1 << (bit))))
 
+/**
+ * @brief      get bit flag as boolean value
+ *
+ * @param      x     the value
+ * @param      bit   The bit index
+ *
+ * @return     true of false
+ */
 #define NX_GET_BIT_BOOL(x, bit) (NX_GET_BIT((x), (bit)) == 1)
 #define NX_SET_BIT_BOOL(x, bit, value)                                         \
     ((value) ? NX_SET_BIT((x), (bit)) : NX_CLEAR_BIT((x), (bit)))

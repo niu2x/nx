@@ -23,6 +23,17 @@
 - [time_now](\ref nx::time_now)
 - [time_diff](\ref nx::time_diff)
 
+# Math Utils
+- [ceil_pow2](\ref nx::ceil_pow2)
+
+# File System 
+- [is_directory](\ref nx::file_system::is_directory)
+- [is_file](\ref nx::file_system::is_file)
+- [exists](\ref nx::file_system::exists)
+- [make_dirs](\ref nx::file_system::make_dirs)
+- [relative_path](\ref nx::file_system::relative_path)
+- [list_dir](\ref nx::file_system::list_dir)
+
 ### Examples
 
 ```

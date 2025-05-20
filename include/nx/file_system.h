@@ -40,6 +40,28 @@ NX_API String relative_path(const String& path, const String& base);
 
 NX_API Vector<String> list_dir(const String& path);
 
+/**
+ * @brief      Gets the parent path.
+ *
+ * @param[in]  path  The path
+ *
+ * @return     The parent path.
+ */
+NX_API String get_parent_path(const String& path);
+
+NX_API String join_path(const String& dir, const String& path);
+
+NX_API char get_path_separator();
+
+/**
+ * @brief      Gets the file name.
+ *
+ * @param[in]  path  The path
+ *
+ * @return     The file name.
+ */
+NX_API String get_file_name(const String& path);
+
 class NX_API File : public Read, public Write, private Uncopyable {
 public:
     explicit File(const String& p);
@@ -90,28 +112,6 @@ NX_API File& out();
  * @return     stderr file
  */
 NX_API File& err();
-
-/**
- * @brief      Gets the file name.
- *
- * @param[in]  path  The path
- *
- * @return     The file name.
- */
-NX_API String get_file_name(const String& path);
-
-/**
- * @brief      Gets the parent path.
- *
- * @param[in]  path  The path
- *
- * @return     The parent path.
- */
-NX_API String get_parent_path(const String& path);
-
-NX_API String join_path(const String& dir, const String& path);
-
-NX_API char get_path_separator();
 
 NX_API ReadAllResult read_file(const String& path);
 
