@@ -4,15 +4,15 @@ EMSDK := /opt/emsdk/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake
 
 build-wasm:
 	cmake -S. -DCMAKE_BUILD_TYPE=Debug -Bbuild/nx/wasm -DNX_STRICT=ON -DNX_BUILD_TEST=OFF -DNX_STATIC=ON -DCMAKE_TOOLCHAIN_FILE=$(EMSDK)
-	cmake --build build/nx/wasm
+	cmake --build build/nx/wasm -j 3
 
 build-nx-static:
 	cmake -S. -DCMAKE_BUILD_TYPE=Debug -Bbuild/nx/static -DNX_STRICT=ON -DNX_BUILD_TEST=ON -DNX_STATIC=ON -DNX_BUILD_ZLIB=ON -DNX_BUILD_LIBZIP=OFF -Dlibzip_DIR=/home/niu2x/project/libzip/build/dist/lib/cmake/libzip;
-	cmake --build build/nx/static;
+	cmake --build build/nx/static -j 3
 
 build-nx-shared:
 	cmake -S. -DCMAKE_BUILD_TYPE=Debug -Bbuild/nx/shared -DNX_STRICT=ON -DNX_BUILD_TEST=ON -DNX_STATIC=OFF -DNX_BUILD_ZLIB=ON -DNX_BUILD_LIBZIP=OFF -Dlibzip_DIR=/home/niu2x/project/libzip/build/dist/lib/cmake/libzip;
-	cmake --build build/nx/shared;
+	cmake --build build/nx/shared -j 3
 
 install-nx-static: build-nx-static
 	cmake --install build/nx/static --prefix dist/static

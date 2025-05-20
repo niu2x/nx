@@ -1,6 +1,6 @@
 #include <nx/file_system.h>
 #include "url-parser/url.hpp"
-#include "log.h"
+#include <nx/log.h>
 
 #if defined(USE_LIBZIP)
     #include <zip.h>
@@ -294,7 +294,7 @@ UniquePtr<Archive> create_archive(const String& file_uri)
             return nullptr;
         }
     } catch (...) {
-        error_log("url parse error: %s\n", file_uri.c_str());
+        NX_LOG_WARNING("url parse error: %s\n", file_uri.c_str());
         return nullptr;
     }
 }

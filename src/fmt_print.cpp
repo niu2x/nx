@@ -1,5 +1,4 @@
 #include <nx/type.h>
-#include "log.h"
 
 class RuntimeException : public std::exception {
 public:

@@ -87,6 +87,11 @@ target_link_directories(${LIB_NAME} PUBLIC
     )
 # endif()
 
+# option(FMT_INSTALL "" OFF)
+# add_subdirectory(deps/fmt)
+# target_link_libraries(${LIB_NAME} PRIVATE 
+    # $<BUILD_INTERFACE:fmt::fmt>
+# )
 
 # <Package>_INCLUDE_DIRS
 # <Package>_LIBRARIES:
