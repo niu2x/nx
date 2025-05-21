@@ -51,6 +51,12 @@ using UniquePtr = std::unique_ptr<T>;
 template <class T>
 using SharedPtr = std::shared_ptr<T>;
 
+template <class K, class V>
+using Map = std::map<K, V>;
+
+template <class T>
+using Function = std::function<T>;
+
 /**
  * @brief      用于被private继承, 子类将不可被Copy
  */

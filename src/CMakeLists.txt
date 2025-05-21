@@ -12,6 +12,7 @@ target_sources(${LIB_NAME} PRIVATE
 	digest.cpp
 
 	log.cpp
+	cmd_parser.cpp
 	fmt_print.cpp
 )
 
