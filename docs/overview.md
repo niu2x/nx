@@ -42,3 +42,8 @@ TimeDuration duration = time_diff(before, after);
 - [make_dirs](\ref nx::file_system::make_dirs)
 - [relative_path](\ref nx::file_system::relative_path)
 - [list_dir](\ref nx::file_system::list_dir)
+- [get_parent_path](\ref nx::file_system::get_parent_path)
+- [get_file_name](\ref nx::file_system::get_file_name)
+- [join_path](\ref nx::file_system::join_path)
+- [get_path_separator](\ref nx::file_system::get_path_separator)
+- [File](\ref nx::file_system::File)
