@@ -10,8 +10,8 @@
 - [UniquePtr<T>](\ref nx::UniquePtr)
 - [Variant<T ...>](\ref nx::Variant)
 
-# basic helper class
-- [Uncopyable](\ref nx::Uncopyable)
+<!-- # basic helper class
+- [Uncopyable](\ref nx::Uncopyable) -->
 
 # basic interface
 - [Read](\ref nx::Read)
@@ -23,7 +23,7 @@
 - [time_now](\ref nx::time_now)
 - [time_diff](\ref nx::time_diff)
 
-### Examples,
+### Examples
 
 ```
 TimePoint before = time_now();
@@ -31,3 +31,19 @@ TimePoint before = time_now();
 TimePoint after = time_now();
 TimeDuration duration = time_diff(before, after);
 ```
+
+# Math Utils
+- [ceil_pow2](\ref nx::ceil_pow2)
+
+# File System 
+- [is_directory](\ref nx::file_system::is_directory)
+- [is_file](\ref nx::file_system::is_file)
+- [exists](\ref nx::file_system::exists)
+- [make_dirs](\ref nx::file_system::make_dirs)
+- [relative_path](\ref nx::file_system::relative_path)
+- [list_dir](\ref nx::file_system::list_dir)
+- [get_parent_path](\ref nx::file_system::get_parent_path)
+- [get_file_name](\ref nx::file_system::get_file_name)
+- [join_path](\ref nx::file_system::join_path)
+- [get_path_separator](\ref nx::file_system::get_path_separator)
+- [File](\ref nx::file_system::File)

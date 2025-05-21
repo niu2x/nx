@@ -9,8 +9,7 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include <sstream>
-
-#include "log.h"
+#include <nx/log.h>
 
 namespace nx::file_system {
 
@@ -133,13 +132,14 @@ File::~File() { close(); }
 bool File::open(OpenMode m)
 {
     if (mode_) {
-        error_log("open fail: %s, reason: busy\n", path_.c_str());
+        NX_LOG_WARNING("open fail: %s, reason: busy\n", path_.c_str());
         return false;
     }
 
     fp_ = fopen(path_.c_str(), m == OpenMode::READ ? "rb" : "wb");
     if (fp_ == nullptr) {
-        error_log("open fail: %s, reason: fp_ is nullptr\n", path_.c_str());
+        NX_LOG_WARNING("open fail: %s, reason: fp_ is nullptr\n",
+                       path_.c_str());
         return false;
     }
 

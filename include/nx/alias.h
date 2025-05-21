@@ -2,6 +2,7 @@
 
 #include <nx/file_system.h>
 #include <nx/digest.h>
+#include <nx/log.h>
 
 /**
  * @brief root namespace
