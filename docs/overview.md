@@ -23,6 +23,15 @@
 - [time_now](\ref nx::time_now)
 - [time_diff](\ref nx::time_diff)
 
+### Examples
+
+```
+TimePoint before = time_now();
+// do something
+TimePoint after = time_now();
+TimeDuration duration = time_diff(before, after);
+```
+
 # Math Utils
 - [ceil_pow2](\ref nx::ceil_pow2)
 
@@ -33,12 +42,3 @@
 - [make_dirs](\ref nx::file_system::make_dirs)
 - [relative_path](\ref nx::file_system::relative_path)
 - [list_dir](\ref nx::file_system::list_dir)
-
-### Examples
-
-```
-TimePoint before = time_now();
-// do something
-TimePoint after = time_now();
-TimeDuration duration = time_diff(before, after);
-```
