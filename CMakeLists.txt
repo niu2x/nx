@@ -2,6 +2,21 @@ cmake_minimum_required(VERSION 3.13.0 FATAL_ERROR)
 
 project ( NX VERSION 0.1.8 LANGUAGES CXX C )        
 
+include(ExternalProject)
+
+# ExternalProject_Add(
+#     fmt
+#     GIT_REPOSITORY https://github.com/fmtlib/fmt.git
+#     GIT_TAG origin/master
+#     PREFIX ${CMAKE_BINARY_DIR}/fmt
+#     # INSTALL_DIR ${CMAKE_BINARY_DIR}/zlib-install
+#     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR> -DFMT_DOC=OFF -DFMT_TEST=OFF
+# )
+
+# ExternalProject_Get_Property(fmt install_dir)
+# message(STATUS "install_dir ${install_dir}")
+
+
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/cmake)
 include(warning_as_error)
 include(CMakePackageConfigHelpers)
@@ -56,41 +71,39 @@ target_link_directories(${LIB_NAME} PUBLIC
 )
 
 # 
+install(TARGETS ${LIB_NAME} EXPORT ${LIB_NAME}-targets DESTINATION lib/niu2x)
+install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/nx DESTINATION include)
+install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/include/nx DESTINATION include)
+install(EXPORT ${LIB_NAME}-targets
+    FILE ${LIB_NAME}-targets.cmake
+    DESTINATION lib/cmake/niu2x/
+    # NAMESPACE niu2x::
+)
 
-# if(NOT NX_STATIC)
-    install(TARGETS ${LIB_NAME} EXPORT ${LIB_NAME}-targets DESTINATION lib/niu2x)
-    install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/nx DESTINATION include)
-    install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/include/nx DESTINATION include)
-    install(EXPORT ${LIB_NAME}-targets
-        FILE ${LIB_NAME}-targets.cmake
-        DESTINATION lib/cmake/niu2x/
-        # NAMESPACE niu2x::
-    )
+configure_package_config_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake_install_config.in
+    "${CMAKE_CURRENT_BINARY_DIR}/${LIB_NAME}-config.cmake"
+    INSTALL_DESTINATION "lib/cmake/niu2x"
+    NO_SET_AND_CHECK_MACRO
+    NO_CHECK_REQUIRED_COMPONENTS_MACRO
+)
 
-    configure_package_config_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake_install_config.in
-        "${CMAKE_CURRENT_BINARY_DIR}/${LIB_NAME}-config.cmake"
-        INSTALL_DESTINATION "lib/cmake/niu2x"
-        NO_SET_AND_CHECK_MACRO
-        NO_CHECK_REQUIRED_COMPONENTS_MACRO
-    )
+write_basic_package_version_file(
+    "${CMAKE_CURRENT_BINARY_DIR}/${LIB_NAME}-config-version.cmake"
+    VERSION "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}"
+    COMPATIBILITY AnyNewerVersion
+)
 
-    write_basic_package_version_file(
-        "${CMAKE_CURRENT_BINARY_DIR}/${LIB_NAME}-config-version.cmake"
-        VERSION "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}"
-        COMPATIBILITY AnyNewerVersion
-    )
+install(FILES
+    ${CMAKE_CURRENT_BINARY_DIR}/${LIB_NAME}-config.cmake
+    ${CMAKE_CURRENT_BINARY_DIR}/${LIB_NAME}-config-version.cmake
+    DESTINATION lib/cmake/niu2x
+)
 
-    install(FILES
-        ${CMAKE_CURRENT_BINARY_DIR}/${LIB_NAME}-config.cmake
-        ${CMAKE_CURRENT_BINARY_DIR}/${LIB_NAME}-config-version.cmake
-        DESTINATION lib/cmake/niu2x
-    )
-# endif()
-
-# option(FMT_INSTALL "" OFF)
+# option(FMT_INSTALL "" NX_STATIC)
 # add_subdirectory(deps/fmt)
+# set_property(TARGET fmt PROPERTY POSITION_INDEPENDENT_CODE ON)
 # target_link_libraries(${LIB_NAME} PRIVATE 
-    # $<BUILD_INTERFACE:fmt::fmt>
+#     $<BUILD_INTERFACE:fmt::fmt>
 # )
 
 # <Package>_INCLUDE_DIRS

@@ -11,12 +11,11 @@ int main()
     //
     //
     //
-    int x = 1;
-    NX_LOG_DEBUG("info");
+    NX_LOG_DEBUG("debug");
     NX_LOG_INFO("info");
-    NX_LOG_WARNING("info");
-    NX_LOG_ERROR("info");
-    NX_LOG_CRITICAL("info");
+    NX_LOG_WARNING("WARNING");
+    NX_LOG_ERROR("error");
+    NX_LOG_CRITICAL("critical");
 
     return 0;
 }

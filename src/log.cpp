@@ -1,30 +1,29 @@
 #include <nx/type.h>
 #include <nx/log.h>
-
-namespace nx {
-
-// void std_error_log(const char* fmt, ...)
-// {
-//     va_list args;
-//     va_start(args, fmt);
-//     vfprintf(stderr, fmt, args);
-//     va_end(args);
-// }
-
-// void black_hole(const char* fmt, ...) { (void)fmt; }
-
-// PrintLike error_log = std_error_log;
-
-// void set_error_log(PrintLike fn) { error_log = fn; }
-// void set_no_error_log() { error_log = black_hole; }
-
-} // namespace nx
+#include <stdarg.h>
 
 #define LOG_LEVEL_GE(a, b) ((int(a)) >= (int(b)))
 
 namespace nx::logging {
 
-static LogLevel current_log_level = LogLevel::INFO;
+static LogLevel get_log_level_from_environment()
+{
+    auto x = std::getenv("NX_LOG_LEVEL");
+    if (x) {
+        if (strcasecmp(x, "debug") == 0) {
+            return LogLevel::DEBUG;
+        } else if (strcasecmp(x, "warning") == 0) {
+            return LogLevel::WARNING;
+        } else if (strcasecmp(x, "error") == 0) {
+            return LogLevel::ERROR;
+        } else if (strcasecmp(x, "critical") == 0) {
+            return LogLevel::CRITICAL;
+        }
+    }
+    return LogLevel::INFO;
+}
+
+static LogLevel current_log_level = get_log_level_from_environment();
 
 void set_level(LogLevel l) { current_log_level = l; }
 
@@ -34,13 +33,16 @@ static const char* tags[] = {
 
 void log_message(LogLevel lv, const char* fmt, ...)
 {
+    (void)lv;
+    (void)fmt;
+    (void)tags;
     if (LOG_LEVEL_GE(lv, current_log_level)) {
-        fprintf(stderr, "[%s] ", tags[(int)lv]);
         va_list args;
         va_start(args, fmt);
-        vfprintf(stderr, fmt, args);
+        char buffer[1024];
+        vsnprintf(buffer, sizeof(buffer), fmt, args);
+        fprintf(stderr, "[%s] %s\n", tags[(int)lv], buffer);
         va_end(args);
-        fprintf(stderr, "\n");
     }
 }
 
