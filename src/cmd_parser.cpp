@@ -117,11 +117,6 @@ int CmdParser::handle_cmd(int argc, const char* const argv[])
         }
     }
 
-    for (auto& item : arg_values_) {
-        printf("%s \n", item.first.c_str());
-        printf("%s \n", std::get<std::string>(item.second).c_str());
-    }
-
     if (argument_.handler)
         argument_.handler(&arg_values_);
 
