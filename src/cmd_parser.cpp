@@ -37,7 +37,7 @@ Optional<ArgumentValue> parse_value(ArgumentType type, const char* x)
             return string_to_int(x);
         }
         case ArgumentType::STRING: {
-            return x;
+            return String(x);
         }
         case ArgumentType::BOOLEAN: {
             return string_to_bool(x);
@@ -115,6 +115,11 @@ int CmdParser::handle_cmd(int argc, const char* const argv[])
         if (arg_values_.find(arg.first) == arg_values_.end()) {
             arg_values_[arg.first] = arg.second.default_value;
         }
+    }
+
+    for (auto& item : arg_values_) {
+        printf("%s \n", item.first.c_str());
+        printf("%s \n", std::get<std::string>(item.second).c_str());
     }
 
     if (argument_.handler)

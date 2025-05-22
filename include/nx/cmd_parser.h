@@ -56,9 +56,18 @@ public:
     CmdParserBuilder();
     ~CmdParserBuilder();
     CmdParserBuilder& add_argument(const char* name, ArgumentType type);
+
     CmdParserBuilder& add_argument(const char* name,
                                    ArgumentType type,
                                    ArgumentValue default_value);
+
+    CmdParserBuilder& add_argument(const char* name,
+                                   ArgumentType type,
+                                   const char* v)
+    {
+        return add_argument(name, type, v);
+    }
+
     CmdParserBuilder& add_sub_command(const char* name,
                                       UniquePtr<CmdParser> parser);
     CmdParserBuilder& set_handler(Handler);
