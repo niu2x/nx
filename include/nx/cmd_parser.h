@@ -48,6 +48,7 @@ public:
 private:
     ProgramArgument argument_;
     ArgumentValueMap arg_values_;
+    void show_usage(const char* program_name);
 };
 
 class NX_API CmdParserBuilder {

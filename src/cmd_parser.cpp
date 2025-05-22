@@ -1,5 +1,6 @@
 #include <nx/cmd_parser.h>
 #include <iostream>
+#include <nx/file_system.h>
 
 namespace nx::cmd {
 
@@ -57,7 +58,10 @@ int CmdParser::handle_cmd(int argc, const char* const argv[])
     size_t pos_arg_index = 0;
     for (int i = 1; i < argc; i++) {
         auto value = argv[i];
-        if (value[0] != '-') {
+        if (strcmp(value, "--help") == 0) {
+            show_usage(argv[0]);
+            return 1;
+        } else if (value[0] != '-') {
             if (argument_.positional_arguments.size() > pos_arg_index) {
                 auto argument = argument_.positional_arguments[pos_arg_index++];
                 auto optional_v = parse_value(argument.type, value);
@@ -117,6 +121,22 @@ int CmdParser::handle_cmd(int argc, const char* const argv[])
         argument_.handler(&arg_values_);
 
     return 0;
+}
+
+void CmdParser::show_usage(const char* program_name)
+{
+    std::cerr << " Usage: " << file_system::get_file_name(program_name);
+    std::cerr << " [OPTIONS]";
+    for (auto& item : argument_.positional_arguments) {
+        std::cerr << " "
+                  << "<" << item.name << ">";
+    }
+    std::cerr << std::endl;
+    std::cerr << "  Options:" << std::endl;
+    for (auto& item : argument_.optional_arguments) {
+        std::cerr << "  "
+                  << "--" << item.first << std::endl;
+    }
 }
 
 CmdParserBuilder::CmdParserBuilder() { }
