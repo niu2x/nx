@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.13.0 FATAL_ERROR)
 
-project ( NX VERSION 0.1.12 LANGUAGES CXX C )             
+project ( NX VERSION 0.1.13 LANGUAGES CXX C )              
 
 include(ExternalProject)
 
