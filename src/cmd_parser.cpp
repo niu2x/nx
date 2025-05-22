@@ -159,7 +159,9 @@ CmdParserBuilder& CmdParserBuilder::add_argument(const char* name,
                                                  ArgumentValue default_value)
 {
 
-    argument_.optional_arguments[name] = { name, type, default_value };
+    argument_.optional_arguments[name] = { name,
+                                           type,
+                                           std::move(default_value) };
     return *this;
 }
 
