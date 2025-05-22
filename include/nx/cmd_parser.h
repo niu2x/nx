@@ -65,7 +65,7 @@ public:
                                    ArgumentType type,
                                    const char* v)
     {
-        return add_argument(name, type, v);
+        return add_argument(name, type, String(v));
     }
 
     CmdParserBuilder& add_sub_command(const char* name,
