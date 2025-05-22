@@ -13,27 +13,30 @@ enum ArgumentType {
 using ArgumentValue = Variant<String, int, bool>;
 
 struct OptionalArgument {
-    const char* name;
+    String name;
     ArgumentType type;
+    ArgumentValue default_value;
 };
 
 struct PositionalArgument {
-    const char* name;
+    String name;
     ArgumentType type;
 };
 
 using PositionalArgumentList = Vector<PositionalArgument>;
-using OptionalArgumentList = Vector<OptionalArgument>;
+using OptionalArgumentMap = Map<String, OptionalArgument>;
 
-struct ProgramArgument;
+using ArgumentValueMap = Map<String, ArgumentValue>;
 
-using Handler = Function<int(const ProgramArgument*)>;
+using Handler = Function<int(const ArgumentValueMap*)>;
+
+class CmdParser;
 
 struct ProgramArgument {
     PositionalArgumentList positional_arguments;
-    OptionalArgumentList optional_arguments;
+    OptionalArgumentMap optional_arguments;
     Handler handler;
-    // Map<String, ProgramArgument*> sub_commands;
+    Map<String, UniquePtr<CmdParser>> sub_commands;
 };
 
 class NX_API CmdParser {
@@ -44,7 +47,8 @@ public:
 
 private:
     ProgramArgument argument_;
-    Map<String, ArgumentValue> arg_values_;
+    ArgumentValueMap arg_values_;
+    void show_usage(const char* program_name);
 };
 
 class NX_API CmdParserBuilder {
@@ -52,6 +56,11 @@ public:
     CmdParserBuilder();
     ~CmdParserBuilder();
     CmdParserBuilder& add_argument(const char* name, ArgumentType type);
+    CmdParserBuilder& add_argument(const char* name,
+                                   ArgumentType type,
+                                   ArgumentValue default_value);
+    CmdParserBuilder& add_sub_command(const char* name,
+                                      UniquePtr<CmdParser> parser);
     CmdParserBuilder& set_handler(Handler);
     UniquePtr<CmdParser> build();
 
@@ -60,15 +69,3 @@ private:
 };
 
 } // namespace nx::cmd
-
-#define NX_MAIN(args_name, program_argument_builder)                           \
-    int main(int argc, const char* const argv[])                               \
-    {                                                                          \
-        nx::cmd::CmdParserBuilder args_name;                                   \
-        { program_argument_builder };                                          \
-        return args_name.build()->handle_cmd(argc, argv);                      \
-    }
-
-// NX_MAIN({
-
-// })
