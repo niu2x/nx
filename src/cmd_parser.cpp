@@ -82,11 +82,7 @@ int CmdParser::handle_cmd(int argc, const char* const argv[])
                     auto optional_v = parse_value(it->second.type, val);
                     if (optional_v) {
                         arg_values_[name] = std::move(*optional_v);
-                        printf("11 %s %d\n",
-                               name,
-                               std::get<bool>(arg_values_[name]));
                     } else {
-                        printf("22 \n");
                         std::cerr << "invalid value for " << name << std::endl;
                         return 1;
                     }
