@@ -34,5 +34,6 @@ int main(int argc, const char* const argv[])
         std::cout << "sex: " << sex << std::endl;
         return 0;
     });
+    NX_LOG_INFO("info");
     return args.build()->handle_cmd(argc, argv);
 }
