@@ -6,8 +6,17 @@
     #include <sys/stat.h>
 #endif
 
-#include <sys/stat.h>
-#include <unistd.h>
+#if defined(_WIN32)
+    #include <process.h>
+    #include <io.h>
+    #include <direct.h>
+    #define access _access
+    #define F_OK 0
+    #define mkdir(a, b) _mkdir((a))
+#else
+    #include <unistd.h>
+#endif
+
 #include <sstream>
 #include <nx/log.h>
 
@@ -29,9 +38,8 @@ bool is_directory(const String& path)
 String get_file_name(const String& path)
 {
 #if defined(USE_STD_FILE_SYSTEM)
-    return std::filesystem::path(path).filename();
+    return std::filesystem::path(path).filename().u8string();
 #else
-
     size_t pos = path.find_last_of("/\\");
     if (pos == String::npos) {
         return path; // No directory separators found
@@ -43,7 +51,7 @@ String get_file_name(const String& path)
 String get_parent_path(const String& path)
 {
 #if defined(USE_STD_FILE_SYSTEM)
-    return std::filesystem::path(path).parent_path();
+    return std::filesystem::path(path).parent_path().u8string();
 #else
     size_t pos = path.find_last_of("/\\");
     if (pos == String::npos) {
@@ -179,7 +187,7 @@ ReadResult File::read(void* buffer, size_t bytes)
     if (ferror(fp_))
         return IO_Error::IO_FAIL;
 
-    return IO_Success { .bytes = fread(buffer, 1, bytes, fp_) };
+    return IO_Success {  fread(buffer, 1, bytes, fp_) };
 }
 
 WriteResult File::write(const void* buffer, size_t bytes)
@@ -191,7 +199,7 @@ WriteResult File::write(const void* buffer, size_t bytes)
     if (ferror(fp_))
         return IO_Error::IO_FAIL;
 
-    return IO_Success { .bytes = fwrite(buffer, 1, bytes, fp_) };
+    return IO_Success {  fwrite(buffer, 1, bytes, fp_) };
 }
 
 File& File::in()
@@ -259,7 +267,7 @@ Vector<String> list_dir(const String& path)
     }
     try {
         for (const auto& entry : std::filesystem::directory_iterator(path)) {
-            result.push_back(entry.path());
+            result.push_back(entry.path().u8string());
         }
     } catch (...) {
     }
@@ -268,7 +276,7 @@ Vector<String> list_dir(const String& path)
 
 String relative_path(const String& path, const String& base)
 {
-    return std::filesystem::relative(path, base);
+    return std::filesystem::relative(path, base).u8string();
 }
 
 } // namespace nx::file_system

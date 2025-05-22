@@ -1,8 +1,11 @@
 #include <nx/digest.h>
 
 #define __CPROVER_assume(...)
+#if defined(_WIN32)
+#define FN_
+#else
 #define FN_ static inline __attribute__((const))
-
+#endif
 namespace nx::digest {
 
 // using SHA256_Context = SHA256::SHA256_Context;
