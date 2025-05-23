@@ -131,7 +131,7 @@ public:
     Vector<String> list_dir(const String& path) override
     {
         NX_ASSERT(path.size() > 0 && path[0] == '/',
-                  "list_dir expect path start with '/'");
+                  "list_dir expect path start with '/'", 0);
 
         auto dir = join_path(root_dir_, path.substr(1));
         auto result = file_system::list_dir(dir);
@@ -144,7 +144,7 @@ public:
     UniquePtr<Read> open(const String& path) override
     {
         NX_ASSERT(path.size() > 0 && path[0] == '/',
-                  "open expect path start with '/'");
+                  "open expect path start with '/'", 0);
 
         auto file_path = join_path(root_dir_, path);
         auto file = std::make_unique<File>(file_path);

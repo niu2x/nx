@@ -2,6 +2,10 @@
 
 #include <nx/type.h>
 
+#if NX_PLATFORM == NX_PLATFORM_WINDOW
+    #undef ERROR
+#endif
+
 namespace nx::logging {
 
 enum class LogLevel {

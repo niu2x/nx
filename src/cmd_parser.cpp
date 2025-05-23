@@ -2,6 +2,10 @@
 #include <iostream>
 #include <nx/file_system.h>
 
+#if NX_PLATFORM_WINDOW == NX_PLATFORM
+    #define strcasecmp _stricmp
+#endif
+
 namespace nx::cmd {
 
 Optional<int> string_to_int(const char* cstr)
