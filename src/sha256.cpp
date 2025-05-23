@@ -1,8 +1,8 @@
 #include <nx/digest.h>
 
 #define __CPROVER_assume(...)
-#if defined(_WIN32)
-#define FN_
+#if NX_PLATFORM == NX_PLATFORM_WINDOW
+    #define FN_
 #else
 #define FN_ static inline __attribute__((const))
 #endif

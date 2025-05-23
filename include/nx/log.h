@@ -2,8 +2,8 @@
 
 #include <nx/type.h>
 
-#if defined(_WIN32)
-#undef ERROR
+#if NX_PLATFORM == NX_PLATFORM_WINDOW
+    #undef ERROR
 #endif
 
 namespace nx::logging {

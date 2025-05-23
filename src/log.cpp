@@ -2,8 +2,8 @@
 #include <nx/log.h>
 #include <stdarg.h>
 
-#if defined(_WIN32)
-#define strcasecmp _stricmp
+#if NX_PLATFORM_WINDOW == NX_PLATFORM
+    #define strcasecmp _stricmp
 #endif
 
 #define LOG_LEVEL_GE(a, b) ((int(a)) >= (int(b)))

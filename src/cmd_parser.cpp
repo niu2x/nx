@@ -2,8 +2,8 @@
 #include <iostream>
 #include <nx/file_system.h>
 
-#if defined(_WIN32)
-#define strcasecmp _stricmp
+#if NX_PLATFORM_WINDOW == NX_PLATFORM
+    #define strcasecmp _stricmp
 #endif
 
 namespace nx::cmd {

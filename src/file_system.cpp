@@ -6,7 +6,7 @@
     #include <sys/stat.h>
 #endif
 
-#if defined(_WIN32)
+#if NX_PLATFORM_WINDOW == NX_PLATFORM
     #include <process.h>
     #include <io.h>
     #include <direct.h>
@@ -15,6 +15,7 @@
     #define mkdir(a, b) _mkdir((a))
 #else
     #include <unistd.h>
+    #include <sys/stat.h>
 #endif
 
 #include <sstream>
@@ -226,7 +227,7 @@ File& err() { return File::err(); }
 
 char get_path_separator()
 {
-#if defined(NX_PLATFORM_WINDOW)
+#if NX_PLATFORM_WINDOW == NX_PLATFORM
     return '\\';
 #else
     return '/';

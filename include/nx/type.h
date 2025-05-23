@@ -21,10 +21,13 @@
 #include <chrono>
 #include <nx/api.h>
 
+#define NX_PLATFORM_WINDOW 1
+#define NX_PLATFORM_LINUX  2
+
 #if defined(WIN32)
-    #define NX_PLATFORM_WINDOW
+    #define NX_PLATFORM NX_PLATFORM_WINDOW
 #else
-    #define NX_PLATFORM_POSIX
+    #define NX_PLATFORM NX_PLATFORM_LINUX
 #endif
 
 namespace nx {
