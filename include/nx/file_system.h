@@ -132,4 +132,5 @@ using GlobCallback = Function<void(const String& path)>;
 NX_API void glob(const String& directory,
                  const String& glob_pattern,
                  GlobCallback callback);
+NX_API List<String> glob(const String& directory, const String& glob_pattern);
 }

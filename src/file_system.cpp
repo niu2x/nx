@@ -344,4 +344,13 @@ void glob(const String& directory,
     }
 }
 
+List<String> glob(const String& directory, const String& glob_pattern)
+{
+    List<String> files;
+    glob(directory, glob_pattern, [&files](auto& item) {
+        files.push_back(item);
+    });
+    return files;
+}
+
 } // namespace nx::file_system

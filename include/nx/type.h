@@ -16,6 +16,7 @@
 #include <optional>
 #include <variant>
 #include <regex>
+#include <list>
 #include <chrono>
 #include <string>
 #include <stdexcept>
@@ -64,6 +65,9 @@ using Map = std::map<K, V>;
 
 template <class T>
 using Function = std::function<T>;
+
+template <class T>
+using List = std::list<T>;
 
 /**
  * @brief      用于被private继承, 子类将不可被Copy
