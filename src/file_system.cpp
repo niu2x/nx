@@ -91,7 +91,7 @@ bool make_dirs(const String& path)
     }
 
     // 找到最后一个'/'的位置
-    size_t last_slash = path.rfind('/');
+    size_t last_slash = path.rfind(path_separator);
 
     // 分割父目录和当前目录
     String parent_dir, current_dir;
@@ -278,7 +278,29 @@ String relative_path(const String& path, const String& base)
     return std::filesystem::relative(path, base).u8string();
 }
 
-// bool path_match(const String &path, const String &pattern) {}
+std::regex transform_pattern(const String& glob_pattern)
+{
+    std::stringstream ss;
+    const char* p = glob_pattern.c_str();
+    while (*p) {
+        if (*p == '*') {
+            if (*(p + 1) == '*') {
+                ss << ".*";
+                p++;
+            } else {
+                ss << "[^/]*";
+            }
+        } else if (*p == '.') {
+            ss << '\\' << *p;
+        } else {
+            ss << *p;
+        }
+        p++;
+    }
+
+    auto pattern = ss.str();
+    return std::regex { pattern };
+}
 
 void glob(const String& directory,
           const String& glob_pattern,
@@ -289,39 +311,11 @@ void glob(const String& directory,
         return;
     }
 
-    (void)directory;
-    (void)glob_pattern;
-    (void)callback;
+    std::regex regex_pattern = transform_pattern(glob_pattern);
 
-    std::regex regex_pattern;
-
-    {
-        // std::regex regex_1("\\*\\*");
-        // std::regex regex_2("\\*");
-        // auto pattern = std::regex_replace(glob_pattern, regex_1, ".*");
-        // pattern = std::regex_replace(pattern, regex_2, "[^/]*");
-        std::stringstream ss;
-        ss << directory;
-
-        const char* p = glob_pattern.c_str();
-        while (*p) {
-            if (*p == '*') {
-                if (*(p + 1) == '*') {
-                    ss << ".*";
-                    p++;
-                } else {
-                    ss << "[^/]*";
-                }
-            } else if (*p == '.') {
-                ss << '\\' << *p;
-            } else {
-                ss << *p;
-            }
-            p++;
-        }
-
-        auto pattern = ss.str();
-        regex_pattern = std::regex { pattern };
+    auto directory_len = directory.size();
+    if (directory[directory.size() - 1] != path_separator) {
+        directory_len++;
     }
 
     Queue<String> queue { { directory } };
@@ -330,13 +324,14 @@ void glob(const String& directory,
         queue.pop();
         auto subs = list_dir(item);
         for (auto& x : subs) {
+            const char* match_part = x.c_str() + directory_len;
             if (is_directory(x)) {
-                if (std::regex_match(x, regex_pattern)) {
+                if (std::regex_match(match_part, regex_pattern)) {
                     callback(x);
                 }
                 queue.push(std::move(x));
             } else {
-                if (std::regex_match(x, regex_pattern)) {
+                if (std::regex_match(match_part, regex_pattern)) {
                     callback(x);
                 }
             }
