@@ -278,4 +278,70 @@ String relative_path(const String& path, const String& base)
     return std::filesystem::relative(path, base).u8string();
 }
 
+// bool path_match(const String &path, const String &pattern) {}
+
+void glob(const String& directory,
+          const String& glob_pattern,
+          GlobCallback callback)
+{
+    if (!is_directory(directory)) {
+        NX_LOG_WARNING("glob: %s is not directory", directory.c_str());
+        return;
+    }
+
+    (void)directory;
+    (void)glob_pattern;
+    (void)callback;
+
+    std::regex regex_pattern;
+
+    {
+        // std::regex regex_1("\\*\\*");
+        // std::regex regex_2("\\*");
+        // auto pattern = std::regex_replace(glob_pattern, regex_1, ".*");
+        // pattern = std::regex_replace(pattern, regex_2, "[^/]*");
+        std::stringstream ss;
+        ss << directory;
+
+        const char* p = glob_pattern.c_str();
+        while (*p) {
+            if (*p == '*') {
+                if (*(p + 1) == '*') {
+                    ss << ".*";
+                    p++;
+                } else {
+                    ss << "[^/]*";
+                }
+            } else if (*p == '.') {
+                ss << '\\' << *p;
+            } else {
+                ss << *p;
+            }
+            p++;
+        }
+
+        auto pattern = ss.str();
+        regex_pattern = std::regex { pattern };
+    }
+
+    Queue<String> queue { { directory } };
+    while (!queue.empty()) {
+        String item = std::move(queue.front());
+        queue.pop();
+        auto subs = list_dir(item);
+        for (auto& x : subs) {
+            if (is_directory(x)) {
+                if (std::regex_match(x, regex_pattern)) {
+                    callback(x);
+                }
+                queue.push(std::move(x));
+            } else {
+                if (std::regex_match(x, regex_pattern)) {
+                    callback(x);
+                }
+            }
+        }
+    }
+}
+
 } // namespace nx::file_system

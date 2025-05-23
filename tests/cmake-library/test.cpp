@@ -32,6 +32,9 @@ int main(int argc, const char* const argv[])
         std::cout << "age: " << age << std::endl;
         int sex = std::get<bool>(args->find("sex")->second);
         std::cout << "sex: " << sex << std::endl;
+
+        nx::fs::glob(
+            "./", "*.txt", [](auto& x) { NX_LOG_INFO("%s", x.c_str()); });
         return 0;
     });
     NX_LOG_INFO("info");

@@ -6,6 +6,7 @@
 #include <cstddef>
 #include <cstdint>
 #include <vector>
+#include <queue>
 #include <map>
 #include <type_traits>
 #include <unordered_map>
@@ -14,6 +15,7 @@
 #include <memory>
 #include <optional>
 #include <variant>
+#include <regex>
 #include <chrono>
 #include <string>
 #include <stdexcept>
@@ -42,6 +44,9 @@ using Optional = std::optional<T>;
 
 template <class T>
 using Vector = std::vector<T>;
+
+template <class T>
+using Queue = std::queue<T>;
 
 using String = std::string;
 

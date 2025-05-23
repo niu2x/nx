@@ -127,4 +127,9 @@ public:
 NX_API UniquePtr<Archive> create_archive(const String& file_uri);
 NX_API UniquePtr<Archive> create_zip_archive_from_memory(const void* buf,
                                                          size_t len);
+
+using GlobCallback = Function<void(const String& path)>;
+NX_API void glob(const String& directory,
+                 const String& glob_pattern,
+                 GlobCallback callback);
 }
