@@ -162,7 +162,7 @@ using TimePoint = std::chrono::time_point<std::chrono::system_clock>;
 /**
  * @brief      milliseconds
  */
-using TimeDuration = double;
+using TimeDuration = int64_t;
 
 /**
  * @brief      get current clock time
