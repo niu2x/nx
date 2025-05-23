@@ -57,9 +57,6 @@ static const char* tag_colors[] = {
 
 void log_message(LogLevel lv, const char* fmt, ...)
 {
-    (void)lv;
-    (void)fmt;
-    (void)tags;
     if (LOG_LEVEL_GE(lv, current_log_level)) {
         va_list args;
         va_start(args, fmt);
