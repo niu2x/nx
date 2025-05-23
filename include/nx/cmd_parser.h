@@ -28,9 +28,8 @@ using OptionalArgumentMap = Map<String, OptionalArgument>;
 
 using ArgumentValueMap = Map<String, ArgumentValue>;
 
-using Handler = Function<int(const ArgumentValueMap*)>;
-
 class CmdParser;
+using Handler = Function<int(const CmdParser*)>;
 
 struct ProgramArgument {
     PositionalArgumentList positional_arguments;
@@ -44,6 +43,16 @@ public:
     CmdParser(ProgramArgument&& argument);
     ~CmdParser();
     int handle_cmd(int argc, const char* const argv[]);
+
+    template <class T>
+    T get(const String& key) const
+    {
+        auto it = arg_values_.find(key);
+        if (it == arg_values_.end()) {
+            NX_PANIC("no such argument %s", key.c_str());
+        }
+        return std::get<T>(it->second);
+    }
 
 private:
     ProgramArgument argument_;

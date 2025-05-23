@@ -22,16 +22,22 @@
 //     // NX_LOG_CRITICAL("critical");
 // })
 
+// ("age", INT)
+// ("sex", BOOLEAN, true)
+
 int main(int argc, const char* const argv[])
 {
     nx::cmd::CmdParserBuilder args;
     args.add_argument("age", nx::cmd::ArgumentType::INT);
     args.add_argument("sex", nx::cmd::ArgumentType::BOOLEAN, true);
-    args.set_handler([](auto* args) {
-        int age = std::get<int>(args->find("age")->second);
+    args.set_handler([](const nx::cmd::CmdParser* args) {
+        int age = args->get<int>("age");
         std::cout << "age: " << age << std::endl;
-        int sex = std::get<bool>(args->find("sex")->second);
+        bool sex = args->get<bool>("sex");
         std::cout << "sex: " << sex << std::endl;
+
+        nx::fs::glob(
+            ".", "*.txt", [](auto& x) { NX_LOG_INFO("%s", x.c_str()); });
         return 0;
     });
     NX_LOG_INFO("info");

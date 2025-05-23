@@ -122,7 +122,7 @@ int CmdParser::handle_cmd(int argc, const char* const argv[])
     }
 
     if (argument_.handler)
-        argument_.handler(&arg_values_);
+        argument_.handler(this);
 
     return 0;
 }
