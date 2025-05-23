@@ -51,7 +51,7 @@ NX_API String get_parent_path(const String& path);
 
 NX_API String join_path(const String& dir, const String& path);
 
-NX_API char get_path_separator();
+NX_API extern const char path_separator;
 
 /**
  * @brief      Gets the file name.

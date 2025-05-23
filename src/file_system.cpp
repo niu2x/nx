@@ -225,20 +225,18 @@ File& in() { return File::in(); }
 File& out() { return File::out(); }
 File& err() { return File::err(); }
 
-char get_path_separator()
-{
+const char path_separator =
 #if NX_PLATFORM_WINDOW == NX_PLATFORM
-    return '\\';
+    '\\'
 #else
-    return '/';
+    '/'
 #endif
-}
+    ;
 
 String join_path(const String& p1, const String& p2)
 {
     std::stringstream ss;
 
-    char path_separator = get_path_separator();
     if (p1.size() > 0 && *(p1.end() - 1) == path_separator) {
         ss << p1.substr(0, p1.size() - 1);
     } else {
