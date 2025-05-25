@@ -54,21 +54,18 @@ int main(int argc, const char* const argv[])
 {
     nx::cmd::CmdParserBuilder args_1;
     args_1.add_argument("age", nx::cmd::ArgumentType::INT);
-    args_1.add_argument("sex", nx::cmd::ArgumentType::BOOLEAN, true);
     args_1.set_handler([](const nx::cmd::CmdParser* args_1) {
         int age = args_1->get<int>("age");
         std::cout << "age: " << age << std::endl;
-        bool sex = args_1->get<bool>("sex");
-        std::cout << "sex: " << sex << std::endl;
         return 0;
     });
     auto cmd_a = args_1.build();
 
     nx::cmd::CmdParserBuilder args_2;
-    args_2.add_argument("money", nx::cmd::ArgumentType::INT);
+    args_2.add_argument("num", nx::cmd::ArgumentType::INT);
     args_2.set_handler([](const nx::cmd::CmdParser* args_2) {
-        int money = args_2->get<int>("money");
-        std::cout << "money: " << money << std::endl;
+        int num = args_2->get<int>("num");
+        std::cout << "num: " << num << std::endl;
         return 0;
     });
     auto cmd_b = args_2.build();
