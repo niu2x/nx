@@ -175,4 +175,56 @@ UniquePtr<CmdParser> CmdParserBuilder::build()
     return std::make_unique<CmdParser>(std::move(argument_));
 }
 
+Cmd::Cmd() { }
+Cmd::~Cmd() { }
+
+SingleCmd::SingleCmd(UniquePtr<CmdParser> parser) : parser_(std::move(parser))
+{
+}
+
+SingleCmd::~SingleCmd() { }
+
+int SingleCmd::handle_cmd(int argc, const char* const argv[])
+{
+    return parser_->handle_cmd(argc, argv);
+}
+
+GroupCmd::GroupCmd() { }
+GroupCmd::~GroupCmd() { }
+
+void GroupCmd::add_sub_command(const String& name, UniquePtr<Cmd> cmd)
+{
+    sub_commands_[name] = std::move(cmd);
+}
+
+int GroupCmd::handle_cmd(int argc, const char* const argv[])
+{
+    if (argc >= 2) {
+        String cmd = argv[1];
+        if (cmd == "--help" || cmd == "help") {
+            std::cerr << "Usage" << std::endl;
+        } else {
+            auto it = sub_commands_.find(cmd);
+            if (it != sub_commands_.end()) {
+                std::vector<const char*> sub_argv;
+                String program_name = argv[0];
+                program_name += " ";
+                program_name += argv[1];
+
+                sub_argv.push_back(program_name.c_str());
+
+                for (int i = 2; i < argc; i++) {
+                    sub_argv.push_back(argv[i]);
+                }
+                return it->second->handle_cmd(argc - 1, sub_argv.data());
+            } else {
+                std::cerr << "no such sub_command: " << cmd << std::endl;
+            }
+        }
+    } else {
+        std::cerr << "expect a sub_command" << std::endl;
+    }
+    return 1;
+}
+
 } // namespace nx::cmd

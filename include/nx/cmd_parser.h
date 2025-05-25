@@ -35,7 +35,6 @@ struct ProgramArgument {
     PositionalArgumentList positional_arguments;
     OptionalArgumentMap optional_arguments;
     Handler handler;
-    Map<String, UniquePtr<CmdParser>> sub_commands;
 };
 
 class NX_API CmdParser {
@@ -77,13 +76,40 @@ public:
         return add_argument(name, type, String(v));
     }
 
-    CmdParserBuilder& add_sub_command(const char* name,
-                                      UniquePtr<CmdParser> parser);
     CmdParserBuilder& set_handler(Handler);
     UniquePtr<CmdParser> build();
 
 private:
     ProgramArgument argument_;
+};
+
+class NX_API Cmd {
+public:
+    Cmd();
+    virtual ~Cmd();
+    virtual int handle_cmd(int argc, const char* const argv[]) = 0;
+};
+
+class NX_API SingleCmd : public Cmd {
+public:
+    SingleCmd(UniquePtr<CmdParser> parser);
+    ~SingleCmd();
+    int handle_cmd(int argc, const char* const argv[]) override;
+
+private:
+    UniquePtr<CmdParser> parser_;
+};
+
+class NX_API GroupCmd : public Cmd {
+public:
+    GroupCmd();
+    ~GroupCmd();
+
+    int handle_cmd(int argc, const char* const argv[]) override;
+    void add_sub_command(const String& name, UniquePtr<Cmd> cmd);
+
+private:
+    Map<String, UniquePtr<Cmd>> sub_commands_;
 };
 
 } // namespace nx::cmd
