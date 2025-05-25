@@ -48,11 +48,14 @@ int main(int argc, const char* const argv[])
     });
     auto cmd_b = args_2.build();
 
-    nx::cmd::GroupCmd group_cmd;
-    group_cmd.add_sub_command(
+    auto group_cmd = std::make_unique<nx::cmd::GroupCmd>();
+    group_cmd->add_sub_command(
         "a", std::make_unique<nx::cmd::SingleCmd>(std::move(cmd_a)));
-    group_cmd.add_sub_command(
+    group_cmd->add_sub_command(
         "b", std::make_unique<nx::cmd::SingleCmd>(std::move(cmd_b)));
 
-    return group_cmd.handle_cmd(argc, argv);
+    nx::cmd::GroupCmd group_cmd_a;
+    group_cmd_a.add_sub_command("test", std::move(group_cmd));
+
+    return group_cmd_a.handle_cmd(argc, argv);
 }
