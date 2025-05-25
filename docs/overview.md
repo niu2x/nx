@@ -45,7 +45,6 @@ TimeDuration duration = time_diff(before, after);
 - [get_parent_path](\ref nx::file_system::get_parent_path)
 - [get_file_name](\ref nx::file_system::get_file_name)
 - [join_path](\ref nx::file_system::join_path)
-- [get_path_separator](\ref nx::file_system::get_path_separator)
 - [File](\ref nx::file_system::File)
 
 # Command Line Parser
