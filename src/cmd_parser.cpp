@@ -203,9 +203,10 @@ int GroupCmd::handle_cmd(int argc, const char* const argv[])
         String cmd = argv[1];
         if (cmd == "--help" || cmd == "help") {
             std::cerr << " Usage: " << file_system::get_file_name(argv[0]);
-            std::cerr << " [SUB COMMANDS]" << std::endl;
+            std::cerr << " <COMMAND>" << std::endl;
+            std::cerr << "  Commands:" << std::endl;
             for (auto& item : sub_commands_) {
-                std::cerr << " " << item.first << std::endl;
+                std::cerr << "  " << item.first << std::endl;
             }
         } else {
             auto it = sub_commands_.find(cmd);
